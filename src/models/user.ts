@@ -1,3 +1,10 @@
+/*
+ * @Author: 林骏宏
+ * @Date: 2020-02-04 12:07:25
+ * @LastEditors  : 林骏宏
+ * @LastEditTime : 2020-02-05 11:17:04
+ * @Description: file content
+ */
 import { Model } from 'dva';
 import get from 'lodash/get';
 import * as api from '@/services/user';
@@ -12,8 +19,8 @@ const User: Model = {
   effects: {
     // 登录
     *login({ payload }, { call, put }) {
-      const { username, password } = payload;
-      const res = yield call(api.login, username, password);
+      const { account, passwd } = payload;
+      const res = yield call(api.login, account, passwd);
       if (res && res.data) {
         yield put({ type: 'user', payload: res.data });
       }

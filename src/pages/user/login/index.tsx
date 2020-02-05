@@ -47,13 +47,13 @@ const Login = ({
   return (
     <Form onSubmit={handleSubmit} className={styles.loginForm}>
       <Form.Item label="账号">
-        {getFieldDecorator('username', {
+        {getFieldDecorator('account', {
           rules: [{ required: true, message: '请输入账号' }],
         })(<Input prefix={<Icon type="user" />} placeholder="请输入账号" />)}
       </Form.Item>
 
       <Form.Item label="密码">
-        {getFieldDecorator('password', {
+        {getFieldDecorator('passwd', {
           rules: [{ required: true, message: '请输入密码' }],
         })(<Input prefix={<Icon type="lock" />} placeholder="请输入密码" type="password" />)}
       </Form.Item>
