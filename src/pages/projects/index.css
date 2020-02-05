@@ -1,0 +1,22 @@
+.card {
+  text-align: center;
+}
+
+.addBtn {
+  cursor: pointer;
+  text-align: center;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.str {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

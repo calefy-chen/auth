@@ -12,7 +12,6 @@ import styles from './index.css';
 interface LoginParams {
   username: string;
   password: string;
-  remember: boolean;
 }
 
 // 登录组件接收到的props
@@ -47,23 +46,18 @@ const Login = ({
   return (
     <Form onSubmit={handleSubmit} className={styles.loginForm}>
       <Form.Item label="账号">
-        {getFieldDecorator('username', {
+        {getFieldDecorator('account', {
           rules: [{ required: true, message: '请输入账号' }],
         })(<Input prefix={<Icon type="user" />} placeholder="请输入账号" />)}
       </Form.Item>
 
       <Form.Item label="密码">
-        {getFieldDecorator('password', {
+        {getFieldDecorator('passwd', {
           rules: [{ required: true, message: '请输入密码' }],
         })(<Input prefix={<Icon type="lock" />} placeholder="请输入密码" type="password" />)}
       </Form.Item>
 
       <Form.Item>
-        {getFieldDecorator('remember', {
-          valuePropName: 'checked',
-          initialValue: true,
-        })(<Checkbox>记住我</Checkbox>)}
-
         <Button type="primary" htmlType="submit" block loading={loginLoading}>
           登录
         </Button>

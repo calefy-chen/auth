@@ -1,3 +1,10 @@
+/*
+ * @Author: 林骏宏
+ * @Date: 2020-02-04 12:07:25
+ * @LastEditors  : 林骏宏
+ * @LastEditTime : 2020-02-05 11:08:22
+ * @Description: file content
+ */
 import { IConfig } from 'umi-types';
 import theme from '@ant-design/aliyun-theme'
 
@@ -7,6 +14,13 @@ const config: IConfig =  {
   hash: true,
   publicPath: './',
   treeShaking: true,
+  proxy: {
+    '/authsys': {
+      target: 'http://47.113.114.129:3000/authsys',
+      changeOrigin: true,
+      pathRewrite: { '^/authsys': '' },
+    },
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
