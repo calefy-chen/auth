@@ -12,7 +12,6 @@ import styles from './index.css';
 interface LoginParams {
   username: string;
   password: string;
-  remember: boolean;
 }
 
 // 登录组件接收到的props
@@ -59,11 +58,6 @@ const Login = ({
       </Form.Item>
 
       <Form.Item>
-        {getFieldDecorator('remember', {
-          valuePropName: 'checked',
-          initialValue: true,
-        })(<Checkbox>记住我</Checkbox>)}
-
         <Button type="primary" htmlType="submit" block loading={loginLoading}>
           登录
         </Button>
