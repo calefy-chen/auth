@@ -7,7 +7,7 @@ import { Form, Button, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 // 创建/编辑上传参数
-interface editParams {
+interface submitParams {
   id?: number,
   name: string;
   code: string;
@@ -18,10 +18,10 @@ interface editParams {
 interface ProjectFormProps {
   editLoading: boolean;
   form: WrappedFormUtils;
-  editProject(payload: editParams): Promise<any>;
-  hideModal: Function;
+  submit(payload: submitParams): Promise<any>;
+  cancel: Function;
   onEditEnd: Function;
-  editDetail: editParams;
+  projectDetail: submitParams;
 }
 
 /**
@@ -29,60 +29,56 @@ interface ProjectFormProps {
  */
 const ProjectForm = ({
   editLoading,
-  editProject,
+  submit,
   form: { getFieldDecorator, validateFields, resetFields },
-  hideModal,
+  cancel,
   onEditEnd,
-  editDetail
+  projectDetail
 }: ProjectFormProps) => {
   useEffect(() => {
     resetFields()
-  }, [editDetail])
+  }, [projectDetail])
 
   // 提交
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     validateFields((errors, values) => {
       if (errors) return;
       let parmas = { ...values }
-      if (editDetail?.id) {
+      if (projectDetail?.id) {
         parmas = {
           ...values,
-          id: editDetail.id,
+          id: projectDetail.id,
         }
       }
-      editProject(parmas).then(res => {
+      submit(parmas).then(res => {
         if (res.code === 200) {
           message.success('处理成功');
           onEditEnd()
         }
       });
     });
-  }, [editDetail]);
-
-  const onClose = useCallback(() => {
-    hideModal()
-  }, [])
+  }, [projectDetail]);
 
   // 渲染表单
   return (
     <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
       <Form.Item label="项目名称" labelCol={{ span: 4 }} wrapperCol={{ span: 14 }}>
         {getFieldDecorator('name', {
-          initialValue: editDetail?.name || '',
+          initialValue: projectDetail?.name || '',
           rules: [{ required: true, message: '请输入项目名称' }],
         })(<Input placeholder="请输入项目名称" />)}
       </Form.Item>
 
       <Form.Item label="项目代码" labelCol={{ span: 4 }} wrapperCol={{ span: 14 }}>
         {getFieldDecorator('code', {
-          initialValue: editDetail?.code || '',
+          initialValue: projectDetail?.code || '',
           rules: [{ required: true, message: '请输入项目代码（全大写英文表示）' }],
         })(<Input placeholder="请输入项目代码（全大写英文表示）" />)}
       </Form.Item>
 
       <Form.Item label="项目描述" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
         {getFieldDecorator('content', {
-          initialValue: editDetail?.content || '',
+          initialValue: projectDetail?.content || '',
           rules: [{ max: 500, message: '长度不超过500个字符' },],
         })(<Input.TextArea placeholder={`请输入项目描述`} rows={4} style={{ marginTop: 5 }} />)}
       </Form.Item>
@@ -92,7 +88,7 @@ const ProjectForm = ({
           提交
         </Button>{' '}
         &emsp;
-        <Button onClick={onClose}>取消</Button>
+        <Button onClick={cancel}>取消</Button>
       </Form.Item>
     </Form>
   );
@@ -100,9 +96,9 @@ const ProjectForm = ({
 
 export default connect(
   ({ loading }: any) => ({
-    editLoading: loading.effects['project/editProject'],
+    editLoading: loading.effects['project/submitProject'],
   }),
   dispatch => ({
-    editProject: (payload: editParams) => dispatch({ type: 'project/editProject', payload }),
+    submit: (payload: submitParams) => dispatch({ type: 'project/submitProject', payload }),
   }),
 )(Form.create()(ProjectForm));

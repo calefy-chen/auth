@@ -21,7 +21,7 @@ interface ProjectsProps {
 
 function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   const [visible, setVisible] = useState(false); // 设置弹窗
-  const [editDetail, setEditDetail] = useState(null); // 设置编辑值
+  const [projectDetail, setProjectDetail] = useState(null); // 设置编辑值
 
   useEffect(() => {
     if (isEmpty(lists)) {
@@ -31,13 +31,13 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
 
   const showModal = useCallback((item=null) => {
     setVisible(true);
-    setEditDetail(item);
+    setProjectDetail(item);
   }, []);
 
   // 关闭弹窗
   const hideModal = useCallback(() => {
     setVisible(false);
-    setEditDetail(null);
+    setProjectDetail(null);
   }, []);
 
   const onEditEnd = useCallback(() => {
@@ -103,7 +103,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
         maskClosable={false}
         footer={null}
       >
-        <ProjectForm hideModal={hideModal} onEditEnd={onEditEnd} editDetail={editDetail} />
+        <ProjectForm cancel={hideModal} onEditEnd={onEditEnd} projectDetail={projectDetail} />
       </Modal>
     </div>
   );

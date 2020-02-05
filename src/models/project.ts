@@ -2,7 +2,7 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-05 20:50:14
+ * @LastEditTime : 2020-02-05 22:50:03
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -27,7 +27,7 @@ const Project: Model = {
     },
 
     // 创建/编辑项目
-    *editProject({ payload }, { call }) {
+    *submitProject({ payload }, { call }) {
       const { id, name, code, content } = payload;
       let res
       if(id) {
