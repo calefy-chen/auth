@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import Link from 'umi/link'
 import { Breadcrumb, Card, Icon } from 'antd';
 import styles from './index.css';
+import Project from './projects/index';
 
 export default function() {
   return (
     <div>
-      <p>
+      {/* <p>
         <Link to="/projects">项目列表</Link>
       </p>
       <Breadcrumb style={{ marginBottom: 16 }}>
@@ -17,7 +18,8 @@ export default function() {
         <Card.Grid className={styles.card}>
           <Icon type="cluster" /> 中央监控
         </Card.Grid>
-      </Card>
+      </Card> */}
+      <Project />
     </div>
   );
 }
