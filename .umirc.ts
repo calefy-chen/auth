@@ -1,3 +1,10 @@
+/*
+ * @Author: 王硕
+ * @Date: 2020-02-05 15:19:25
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-05 19:28:21
+ * @Description: file content
+ */
 import { IConfig } from 'umi-types';
 import theme from '@ant-design/aliyun-theme'
 
@@ -32,6 +39,9 @@ const config: IConfig =  {
       },
     }],
   ],
+  cssLoaderOptions:{
+    localIdentName:'[local]'
+  },
   chainWebpack(config, { webpack }) {
     const isProd = process.env.NODE_ENV === 'production'
 
