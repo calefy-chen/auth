@@ -5,6 +5,7 @@ import { RouteProps } from 'react-router';
 import isEmpty from 'lodash/isEmpty';
 import styles from './index.css';
 import { Spin } from 'antd';
+import Header from '@/components/Header';
 
 interface BasicLayoutProps extends RouteProps {
   user: any;
@@ -47,7 +48,12 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
   }
 
   // 渲染标准布局
-  return <div className={styles.content}>{children}</div>;
+  return (
+    <>
+      <Header user={user} />
+      <div className={styles.content}>{children}</div>
+    </>
+  );
 };
 
 export default connect(

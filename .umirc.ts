@@ -1,8 +1,8 @@
 /*
- * @Author: 王硕
- * @Date: 2020-02-05 15:19:25
- * @LastEditors: 王硕
- * @LastEditTime: 2020-02-05 19:28:21
+ * @Author: 林骏宏
+ * @Date: 2020-02-04 12:07:25
+ * @LastEditors  : 王硕
+ * @LastEditTime : 2020-02-06 12:32:16
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
@@ -14,6 +14,13 @@ const config: IConfig =  {
   hash: true,
   publicPath: './',
   treeShaking: true,
+  proxy: {
+    '/authsys': {
+      target: 'http://47.113.114.129:3000/authsys',
+      changeOrigin: true,
+      pathRewrite: { '^/authsys': '' },
+    },
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
