@@ -1,0 +1,64 @@
+/* 审批日志样式 */
+.logBox {
+  padding: 20px 0 0;
+  margin-left: 180px;
+
+  :global {
+    .ant-timeline-item:last-child {
+      padding: 0;
+    }
+  }
+
+  .label {
+    color: #999;
+  }
+
+  .recordTitle {
+    position: relative;
+  }
+
+  .recordTitleTime {
+    position: absolute;
+    left: -120px;
+    top: 0;
+    font-size: 14px;
+    color: #333;
+
+    p {
+      margin: 0;
+      padding: 0;
+      text-align: right;
+    }
+
+    :last-child {
+      margin-top: -3px;
+    }
+  }
+
+  .recordTitleInfo {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 150px;
+    top: 2px;
+
+    .recordTitleBranch {
+      font-size: 14px;
+      color: #999;
+      margin-left: 10px;
+    }
+  }
+
+  .recordTitleText {
+    margin-right: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 5px;
+  }
+}
+
+.tabsBox {
+  .logBox {
+    margin-left: 100px;
+  }
+}

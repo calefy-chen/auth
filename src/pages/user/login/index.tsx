@@ -36,7 +36,7 @@ const Login = ({
       if (errors) return;
       login(values).then(res => {
         if (res.code === 200) {
-          router.push('/');
+          router.push('/system/2001');
         }
       });
     });
