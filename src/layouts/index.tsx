@@ -3,9 +3,11 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import { RouteProps } from 'react-router';
 import isEmpty from 'lodash/isEmpty';
-import styles from './index.css';
-import { Spin } from 'antd';
+import { Spin, Layout  } from 'antd';
 import Header from '@/components/Header';
+import SilderMenu from '@/components/SilderMenu'
+
+const { Content } = Layout;
 
 interface BasicLayoutProps extends RouteProps {
   user: any;
@@ -50,8 +52,21 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
   // 渲染标准布局
   return (
     <>
-      <Header user={user} />
-      <div className={styles.content}>{children}</div>
+      <Layout>
+        <SilderMenu location={location} />
+        <Layout
+          style={{
+            backgroundColor: '#F7FAFC',
+            minHeight: '100vh',
+            paddingLeft: 10, 
+          }}
+        >
+          <Header user={user} />
+          <Content>{children}</Content>
+        </Layout>
+      </Layout>
+      {/* <Header user={user} /> */}
+      {/* <div className={styles.content}>{children}</div> */}
     </>
   );
 };

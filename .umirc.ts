@@ -2,11 +2,12 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-05 11:08:22
+ * @LastEditTime : 2020-02-07 22:39:26
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
-import theme from '@ant-design/aliyun-theme'
+// import theme from '@ant-design/aliyun-theme'
+const RED = '#e03d3e';
 
 // ref: https://umijs.org/config/
 const config: IConfig =  {
@@ -19,6 +20,11 @@ const config: IConfig =  {
       target: 'http://47.113.114.129:3000/authsys',
       changeOrigin: true,
       pathRewrite: { '^/authsys': '' },
+    },
+    '/sys_inspect': {
+      target: 'http://47.113.114.129:3000/sys_inspect',
+      changeOrigin: true,
+      pathRewrite: { '^/sys_inspect': '' },
     },
   },
   plugins: [
@@ -34,7 +40,12 @@ const config: IConfig =  {
         href: 'favicon.ico'
       }],
       dll: true,
-
+      locale: {
+        enable: false,
+        // default false
+        default: 'zh-CN',
+        baseNavigator: true,
+      },
       routes: {
         exclude: [
           /models\//,
@@ -73,7 +84,21 @@ const config: IConfig =  {
     }
   },
   // 使用主题
-  theme,
+  theme: {
+    'border-radius-base': '2px',
+    'primary-color': '#cc9d52',
+    'btn-primary-bg': RED,
+    'menu-dark-item-active-bg': '#1890FF',
+    // 'form-item-margin-bottom': '20px',
+    // 'form-component-max-height': '30px',
+    'tabs-card-active-color': RED,
+    'tabs-active-color': RED,
+    'tabs-highlight-color': RED,
+    'tabs-ink-bar-color': RED,
+    'tabs-hover-color': RED,
+    'tabs-horizontal-margin': '0 12px 0 24px',
+    'tabs-vertical-padding': '8px 10px 8px 0',
+  },
 }
 
 export default config;
