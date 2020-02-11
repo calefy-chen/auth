@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import router from 'umi/router';
 import { Breadcrumb, Card, Icon } from 'antd';
 import styles from './index.css';
 
 export default function() {
+  useEffect(() => {
+    router.push('/system/2001')
+  },[])
+
   return (
     <div>
       <Breadcrumb style={{ marginBottom: 16 }}>
