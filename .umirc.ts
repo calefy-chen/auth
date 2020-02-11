@@ -16,15 +16,31 @@ const config: IConfig =  {
   publicPath: './',
   treeShaking: true,
   proxy: {
-    '/authsys': {
-      target: 'http://47.113.114.129:3000/authsys',
-      changeOrigin: true,
-      pathRewrite: { '^/authsys': '' },
-    },
+    // '/authsys': {
+    //   target: 'http://47.113.114.129:3000/authsys',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/authsys': '' },
+    // },
+    // '/sys_inspect': {
+    //   target: 'http://47.113.114.129:3000/sys_inspect',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/sys_inspect': '' },
+    // },
     '/sys_inspect': {
-      target: 'http://47.113.114.129:3000/sys_inspect',
+      target: 'http://172.253.60.240:8081/sys_inspect',
       changeOrigin: true,
       pathRewrite: { '^/sys_inspect': '' },
+    },
+    '/cmonitor': {
+      target: 'http://172.253.60.240:8081/cmonitor',
+      changeOrigin: true,
+      pathRewrite: { '^/cmonitor': '' },
+    },
+    '/cmsoa': {
+      // 对OA相关接口调用
+      target: 'http://172.253.40.249:8081',
+      changeOrigin: true,
+      pathRewrite: { '^/cmsoa': '' },
     },
   },
   plugins: [

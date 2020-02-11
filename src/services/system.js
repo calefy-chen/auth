@@ -58,3 +58,8 @@ export function queryDictByDictId() {
 export function addSystemAlarm(params) {
   return post('/sys_inspect/systemAlarm/addSystemAlarm', params);
 }
+
+// 获取链路日志
+export function getLinkLogList(params) {
+  return get('/sys_inspect/systemAlarm/getLinkLogList', params);
+}

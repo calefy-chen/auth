@@ -134,7 +134,6 @@ class SystemWarning extends Component {
   componentDidUpdate(prevProps) {
     const { location: { pathname } } = this.props
     if (prevProps.location.pathname !== pathname) {
-      // this.getListData()
       this.listRef.current.resetForm();
     }
   }

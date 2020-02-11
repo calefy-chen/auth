@@ -40,6 +40,7 @@ export function post(url: string, data?: object, config?: AxiosRequestConfig) {
     ...config,
     url,
     method: 'POST',
-    data: qs.stringify(data)
+    // data: qs.stringify(data)
+    data: data
   })
 }

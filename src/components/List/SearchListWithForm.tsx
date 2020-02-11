@@ -98,7 +98,7 @@ class SearchListWithForm extends React.PureComponent<ISearchListWithFormProps<ID
    */
   public resetForm() {
     this.formRef.current.resetFields()
-    this.reloadData()
+    this.handleSearchChange({})
   }
 
   /**
