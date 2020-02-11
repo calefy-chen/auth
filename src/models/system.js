@@ -24,6 +24,8 @@ export default {
     alarmBigList: [],
     // 预警细类
     alarmMinList: [],
+    // 链路日志
+    logs: [],
   },
 
   effects: {
@@ -69,6 +71,15 @@ export default {
     * addSystemAlarm({ payload }, { call }) {
       return yield call(api.addSystemAlarm, payload)
     },
+    // 链路日志
+    * getLinkLogList({ payload }, { put, call }) {
+      const { data } = yield call(api.getLinkLogList, payload)
+      yield put({
+        type: 'setLinkLogList',
+        payload: data || {},
+      })
+      return data
+    },
   },
 
   reducers: {
@@ -96,10 +107,17 @@ export default {
         alarmMinList: (payload.alarmMinList || []).map((item) => ({ value: item.typeId, name: item.typeName })),
       }
     },
+    setLinkLogList(state, { payload }) {
+      return {
+        ...state,
+        logs: payload
+      }
+    },
     cleanDetail(state) {
       return {
         ...state,
-        systemDetail: {}
+        systemDetail: {},
+        logs: [],
       }
     }
   },

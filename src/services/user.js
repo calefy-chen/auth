@@ -8,11 +8,11 @@
 import { get, post } from '@/utils/request';
 
 // 登录
-export const login = (account: string, passwd: string) => {
-  return post('/authsys/account/login', { account, passwd })
+export const login = ({ oaCode, passwd, imageCode }) => {
+  return get('/cmsoa/cms_login/loginService/login', { oaCode, passwd, imageCode });
 };
 
 // 获取当前用户
 export const current = () => {
-  return get('/authsys/account/current')
+  return post('/cmonitor/user/getCurrentUser')
 };

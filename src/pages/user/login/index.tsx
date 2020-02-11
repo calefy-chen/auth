@@ -35,7 +35,7 @@ const Login = ({
     validateFields((errors, values) => {
       if (errors) return;
       login(values).then(res => {
-        if (res.code === 200) {
+        if (res) {
           router.push('/system/2001');
         }
       });

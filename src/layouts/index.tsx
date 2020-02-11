@@ -26,7 +26,7 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
 
   // 需要登录时，获取当前登录用户，获取失败时跳转
   useEffect(() => {
-    if (!noNeedLogin && isEmpty(user)) {
+    if (!noNeedLogin && !user.name) {
       fetchCurrent().then(u => {
         if (!u) {
           router.push('/user/login');
@@ -56,7 +56,7 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
         <SilderMenu location={location} />
         <Layout
           style={{
-            backgroundColor: '#F7FAFC',
+            backgroundColor: '#efefef',
             minHeight: '100vh',
             paddingLeft: 10, 
           }}

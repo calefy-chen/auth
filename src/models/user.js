@@ -5,11 +5,15 @@
  * @LastEditTime : 2020-02-06 11:22:26
  * @Description: file content
  */
-import { Model } from 'dva';
 import get from 'lodash/get';
 import * as api from '@/services/user';
+import {
+  rsaEncrypt,
+  setCookie,
+  setAuthCookie,
+} from '@/utils/utils';
 
-const User: Model = {
+export default {
   namespace: 'user',
 
   state: {
@@ -20,11 +24,22 @@ const User: Model = {
     // 登录
     *login({ payload }, { call, put }) {
       const { account, passwd } = payload;
-      const res = yield call(api.login, account, passwd);
-      if (res && res.data) {
+      const res = yield call(api.login, {
+        oaCode: account,
+        passwd: rsaEncrypt(passwd),
+        imageCode: 666,
+      });
+      if (res && res.data && res.data.token) {
+        setAuthCookie(res.data.token);
         yield put({ type: 'user', payload: res.data });
+        return true
       }
-      return res;
+      return false;
+    },
+
+    *logout(_, { put }) {
+      setCookie({ 'auth.token': '', expires: 0 });
+      yield put({ type: 'cleanUser' });
     },
 
     // 获取当前用户
@@ -44,7 +59,10 @@ const User: Model = {
         user: get(action, 'payload'),
       };
     },
+    cleanUser() {
+      return {
+        user: {},
+      };
+    },
   },
 };
-
-export default User;

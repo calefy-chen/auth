@@ -98,7 +98,7 @@ class FlowDetailIndex extends Component {
           </TabPane>
           <TabPane tab="链路日志" key="2">
             <div style={{ marginTop: 20 }}>
-              <FlowLogs />
+              <FlowLogs alarmId={id} />
             </div>
           </TabPane>
         </Tabs>
