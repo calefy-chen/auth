@@ -3,8 +3,9 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Icon, Row, Col, Modal, message, Spin } from 'antd';
+import Link from 'umi/link';
 import isEmpty from 'lodash/isEmpty';
-import { connect } from 'dva';
+import { connect, router } from 'dva';
 import styles from './index.css';
 import ProjectForm from '@/components/ProjectForm';
 import { delProject } from '@/services/project';
@@ -29,7 +30,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
     }
   }, [lists]);
 
-  const showModal = useCallback((item=null) => {
+  const showModal = useCallback((item = null) => {
     setVisible(true);
     setProjectDetail(item);
   }, []);
@@ -84,8 +85,10 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
                 <Icon type="delete" key="del" onClick={() => handleDel(item)} />,
               ]}
             >
-              <p className={styles.name}>{item.name}</p>
-              <p className={styles.str}>{item.code}</p>
+              <Link to={`/projects/${item.id}`} style={{color:'#333'}}>
+                <p className={styles.name}>{item.name}</p>
+                <p className={styles.str}>{item.code}</p>
+              </Link>
             </Card>
           </Col>
         ))}

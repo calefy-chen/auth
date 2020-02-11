@@ -1,8 +1,8 @@
 /*
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
- * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-05 11:08:22
+ * @LastEditors  : 王硕
+ * @LastEditTime : 2020-02-06 12:32:16
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
@@ -46,6 +46,9 @@ const config: IConfig =  {
       },
     }],
   ],
+  cssLoaderOptions:{
+    localIdentName:'[local]'
+  },
   chainWebpack(config, { webpack }) {
     const isProd = process.env.NODE_ENV === 'production'
 
