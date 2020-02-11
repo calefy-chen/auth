@@ -1,8 +1,9 @@
+import { projectList } from './../services/project';
 /*
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
- * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-05 22:50:03
+ * @LastEditors  : 王硕
+ * @LastEditTime : 2020-02-09 19:52:40
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -14,6 +15,7 @@ const Project: Model = {
 
   state: {
     projectList: [],
+    projectDetail:'',
   },
 
   effects: {
@@ -22,6 +24,14 @@ const Project: Model = {
       const res = yield call(api.projectList);
       if (res && res.data) {
         yield put({ type: 'setList', payload: res.data });
+      }
+      return res;
+    },
+    // 项目列表
+    *getProjectDetail({payload}, { call, put }) {
+      const res = yield call(api.projectDetail,payload);
+      if (res && res.data) {
+        yield put({ type: 'setDetail', payload: res.data });
       }
       return res;
     },
@@ -47,12 +57,24 @@ const Project: Model = {
   },
 
   reducers: {
+    setProjectId(state, action){
+      return {
+        ...state,
+        projectId: get(action, 'payload'),
+      };
+    },
     setList(state, action) {
       return {
         ...state,
         projectList: get(action, 'payload'),
       };
     },
+    setDetail(state,action){
+      return {
+        ...state,
+        projectDetail: get(action, 'payload'),
+      };
+    }
   },
 };
 
