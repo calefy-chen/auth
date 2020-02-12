@@ -5,6 +5,8 @@
 .addBtn {
   cursor: pointer;
   text-align: center;
+  height: 180px;
+  line-height: 128px;
 }
 
 .name {

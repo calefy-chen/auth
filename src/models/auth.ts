@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 14:55:13
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-09 20:11:57
+ * @LastEditTime : 2020-02-12 19:05:45
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -12,7 +12,7 @@ import * as api from '@/services/auth';
 const Auth: Model = {
   namespace: 'auth',
   state: {
-    authList: [],
+    authList: {},
     tabKey:'role'
   },
 
@@ -51,7 +51,6 @@ const Auth: Model = {
 
   reducers: {
     setTypeKey(state,action){
-      console.log(action)
       return {
         ...state,
         tabKey: get(action, 'payload'),

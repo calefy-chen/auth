@@ -2,7 +2,7 @@
  * 项目列表页
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Icon, Row, Col, Modal, message, Spin } from 'antd';
+import { Card, Icon, Row, Col, Modal, message, Spin, Tooltip } from 'antd';
 import Link from 'umi/link';
 import isEmpty from 'lodash/isEmpty';
 import { connect, router } from 'dva';
@@ -81,11 +81,15 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
               className={styles.card}
               hoverable
               actions={[
-                <Icon type="edit" key="edit" onClick={() => showModal(item)} />,
-                <Icon type="delete" key="del" onClick={() => handleDel(item)} />,
+                <Tooltip placement="top" title="编辑">
+                  <Icon type="edit" key="edit" onClick={() => showModal(item)} />
+                </Tooltip>,
+                <Tooltip placement="top" title="删除">
+                  <Icon type="delete" key="del" onClick={() => handleDel(item)} />
+                </Tooltip>,
               ]}
             >
-              <Link to={`/projects/${item.id}`} style={{color:'#333'}}>
+              <Link to={`/projects/${item.id}`} style={{ color: '#333' }}>
                 <p className={styles.name}>{item.name}</p>
                 <p className={styles.str}>{item.code}</p>
               </Link>
@@ -94,7 +98,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
         ))}
         <Col span={8}>
           <Card className={styles.addBtn} hoverable onClick={() => showModal()}>
-            <Icon type="plus" style={{ fontSize: 20 }} />
+            <Icon type="plus" style={{ fontSize: 30 }} />
           </Card>
         </Col>
       </Row>

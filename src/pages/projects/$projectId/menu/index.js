@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-10 12:56:09
+ * @LastEditTime : 2020-02-12 19:19:16
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -52,17 +52,17 @@ class index extends Component {
         break;
     }
   };
+  // 编辑菜单
   editMenu(item, parentId) {
     this.setState({
       visible: true,
       menuDetail: item,
       parentId: parentId,
     });
-    console.log(item, parentId, '1');
   }
+  // 删除菜单
   deleteMenu(item,parentId) {
     const {fetchAuthList,deleteAuth,projectId} = this.props
-    console.log(item,'xxx')
     confirm({
       title: `您确认要删除"${item.name}"吗？`,
       cancelText: '取消',
@@ -76,21 +76,18 @@ class index extends Component {
         });
       },
     });
-    console.log(parentId, '2');
   }
   addMenu(parentId) {
     this.setState({
       visible: true,
       parentId: parentId,
     });
-    console.log(parentId, '3');
   }
   hideModal = () => {
     this.setState({
       visible: false,
       menuDetail: '',
     });
-    console.log(this.state.perDetail,'222')
   };
   onEditEnd = () => {
     const { fetchAuthList, projectId } = this.props;
@@ -102,15 +99,14 @@ class index extends Component {
   };
   render() {
     const { visible, menuDetail, parentId } = this.state;
-    const { authList } = this.props;
-    const iconData = ['edit', 'delete', 'plus-square'];
+    const iconData = { edit: '编辑', delete: '删除', 'plus-square': '新增' };
     return (
       <>
       <Button type="primary" onClick={()=>this.addMenu('')}>
           新增菜单
         </Button>
         <DragTree
-          treeData={authList['route']}
+          authKey='route'
           iconData={iconData}
           onOption={this.onOption}
           onDrop={this.onDrop}
@@ -122,14 +118,6 @@ class index extends Component {
           maskClosable={false}
           footer={null}
         >
-          {/* {
-            visible?(<PerForm
-              perDetail={perDetail}
-              cancel={this.hideModal}
-              parentId={parentId}
-              onEditEnd={this.onEditEnd}
-            />):null
-          } */}
           <MenuForm
               menuDetail={menuDetail}
               cancel={this.hideModal}
