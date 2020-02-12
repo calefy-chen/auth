@@ -2,19 +2,21 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-11 10:09:14
+ * @LastEditTime : 2020-02-12 19:47:06
  * @Description: file content
  */
 import React, { Component } from 'react';
-import { Modal, Button, message, Descriptions } from 'antd';
+import get from 'lodash/get';
+import { Modal, Button, message, Descriptions, Empty, Spin } from 'antd';
 import { connect } from 'dva';
 import DragTree from '@/components/DragTree/dragTree';
 import PerForm from './perForm';
 import './index.css';
 const { confirm } = Modal;
 @connect(
-  ({ auth, project,loading,authAssign }) => ({
-    toWhoData:authAssign.toWhoData,
+  ({ auth, project, loading, authAssign }) => ({
+    loading: loading.effects['authAssign/getAssignedToWho'],
+    toWhoData: authAssign.toWhoData,
     projectId: project.projectDetail.id,
     authList: auth.authList,
   }),
@@ -116,15 +118,15 @@ class index extends Component {
   };
   render() {
     const { visible, perDetail, parentId, eyeVisible } = this.state;
-    const { authList, toWhoData} = this.props;
-    const iconData = ['edit', 'delete', 'plus-square', 'eye'];
+    const { authList, toWhoData, loading } = this.props;
+    const iconData = { edit: '编辑', delete: '删除', 'plus-square': '新增', eye: '查看权限分配' };
     return (
       <>
         <Button type="primary" onClick={() => this.addPer('')}>
           新增权限
         </Button>
         <DragTree
-          treeData={authList['permission']}
+          authKey='permission'
           iconData={iconData}
           onOption={this.onOption}
           onDrop={this.onDrop}
@@ -150,15 +152,20 @@ class index extends Component {
           maskClosable={false}
           footer={null}
         >
-          <Descriptions>
-          <Descriptions.Item label="角色">
-              {toWhoData['roles']}
-            </Descriptions.Item>
-            <Descriptions.Item label="人员">
-            {toWhoData['users']}
-            </Descriptions.Item>
-
-          </Descriptions>
+          {loading ? (
+            <Spin />
+          ) : get(toWhoData, 'roles', []).length || get(toWhoData, 'users', []).length ? (
+            <Descriptions>
+              {get(toWhoData, 'roles', []).length && toWhoData['roles'] ? (
+                <Descriptions.Item label="角色">{toWhoData['roles']}</Descriptions.Item>
+              ) : null}
+              {get(toWhoData, 'users', []).length ? (
+                <Descriptions.Item label="人员">{toWhoData['users']}</Descriptions.Item>
+              ) : null}
+            </Descriptions>
+          ) : (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="该权限暂无分配" />
+          )}
         </Modal>
       </>
     );

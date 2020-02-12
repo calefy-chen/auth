@@ -2,45 +2,37 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:41:49
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-11 10:13:49
+ * @LastEditTime : 2020-02-12 19:53:42
  * @Description: file content
  */
 import React, { Component } from 'react';
-import {connect} from 'dva'
-import { Tree, Icon,Empty } from 'antd';
+import { connect } from 'dva';
+import { Tree, Icon, Empty, Card, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import './index.css'
+import './index.css';
 
 const { TreeNode } = Tree;
 
 @connect(
-  ({ loading }) => ({
-    loading: loading.effects['auth/getAuthList']
+  ({ loading, auth }) => ({
+    loading: loading.effects['auth/getAuthList'],
+    authList: auth.authList,
   }),
   dispatch => ({
-
+    // setAuthList:
+    setAuthList: payload => dispatch({ type: 'auth/setAuthList', payload }),
   }),
 )
- class dragTree extends Component {
-  static propTypes={
-    treeData:PropTypes.object.isRequired,
-    onOption:PropTypes.func,
-    iconData:PropTypes.array,
-    onDrop:PropTypes.func
-  }
-  componentDidMount() {
-    const { treeData } = this.props;
-    this.setState({
-      gData: [].concat(treeData)
-    });
-  }
-
-  state = {
-    gData: [],
+class dragTree extends Component {
+  static propTypes = {
+    key: PropTypes.string,
+    onOption: PropTypes.func,
+    iconData: PropTypes.object,
+    onDrop: PropTypes.func,
   };
 
   onDrop = info => {
-    const {onDrop} = this.props
+    const { onDrop, authKey, authList, setAuthList } = this.props;
     const dropKey = info.node.props.eventKey;
     const dragKey = info.dragNode.props.eventKey;
     const dropPos = info.node.props.pos.split('-');
@@ -55,7 +47,10 @@ const { TreeNode } = Tree;
         }
       });
     };
-    const data = [...this.state.gData];
+    // 深度copy authList
+    const allData = Object.assign({}, authList);
+    // 获取当前data
+    const data = allData[authKey];
 
     // Find dragObject
     let dragObj;
@@ -63,9 +58,13 @@ const { TreeNode } = Tree;
       arr.splice(index, 1);
       dragObj = item;
     });
+    //修改目标的parentId
+    dragObj.parentId = info.node.props.dataRef.parentId
 
     if (!info.dropToGap) {
       // Drop on the content
+      //如果拖拽的数据没chilren折拖拽数据parentId为上级id
+      dragObj.parentId = info.node.props.dataRef.id
       loop(data, dropKey, item => {
         item.children = item.children || [];
         // where to insert 示例添加到尾部，可以是随意位置
@@ -94,11 +93,13 @@ const { TreeNode } = Tree;
         ar.splice(i + 1, 0, dragObj);
       }
     }
-    this.setState({
-      gData: data,
-    });
-    onDrop(info)
+
+    allData[authKey] = data;
+    // 修改redux中authList
+    setAuthList(allData);
+    onDrop(info);
   };
+  //递归渲染treeNode
   renderTreeNodes = data =>
     data.map(item => {
       if (item.children) {
@@ -110,55 +111,53 @@ const { TreeNode } = Tree;
       }
       return <TreeNode key={item.id} title={this.iconButton(item)} dataRef={item} />;
     });
+  // 操作按钮
   iconButton(msg) {
     const { iconData } = this.props;
     return (
       <div className="dragItem clearfix">
         <p style={{ float: 'left' }}>
           <span>{msg.name}</span>&nbsp;&nbsp;
-          <span style={{color:'#999'}}>{msg.code}</span>
+          <span style={{ color: '#999' }}>{msg.code}</span>
         </p>
         <div style={{ float: 'right' }} className="iconGroup">
-          {
-          iconData.map((item,index)=> {
+          {Object.keys(iconData).map((item, index) => {
             return (
-              <span
-                style={{display:'inline-block',marginRight:'5px'}}
-                onClick={() => {
-                  this.onOption(msg,msg.parentId,item);
-                }}
-                key={index}
-              >
-                <Icon type={item} style={{fontSize:'14px'}}/>
-              </span>
+              <Tooltip key={index} placement="topLeft" title={iconData[item]}>
+                <span
+                  style={{ display: 'inline-block', paddingLeft: '10px' }}
+                  onClick={() => {
+                    this.onOption(msg, msg.parentId, item);
+                  }}
+                >
+                  <Icon type={item} style={{ fontSize: '14px' }} />
+                </span>
+              </Tooltip>
             );
           })}
         </div>
       </div>
     );
   }
-  onOption(item,parentId,type) {
-    const {onOption} = this.props
-    if(!parentId){
-      parentId = item.id
+  // 点击操作按钮，回调事件
+  onOption(item, parentId, type) {
+    const { onOption } = this.props;
+    if (!parentId) {
+      parentId = item.id;
     }
-    onOption(item,parentId,type)
+    onOption(item, parentId, type);
   }
   render() {
-    const { gData } = this.state;
-    return (
-      gData.length?
-      (<Tree
-        className="draggable-tree"
-        draggable
-        blockNode
-        onDragEnter={this.onDragEnter}
-        onDrop={this.onDrop}
-      >
-        {this.renderTreeNodes(gData)}
-      </Tree>):
-      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+    const { authList, authKey } = this.props;
+    return authList[authKey].length ? (
+      <Card style={{ width: '60%', margin: '15px auto 0 auto' }}>
+        <Tree className="draggable-tree" draggable blockNode defaultExpandAll onDrop={this.onDrop}>
+          {this.renderTreeNodes(authList[authKey])}
+        </Tree>
+      </Card>
+    ) : (
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
     );
   }
 }
-export default dragTree
+export default dragTree;

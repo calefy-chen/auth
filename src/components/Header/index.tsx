@@ -7,14 +7,17 @@ export default function Header(user: any) {
   const userInfo = user.user
   return (
     <div className={styles.header}>
-      <span className={styles.home}>
+      <div className={styles.content}>
+        <span className={styles.home} style={{float:'left'}}>
         <Icon type="home" style={{fontSize: 16, marginRight: 4}}/>
         <Link to="/">首页</Link>
-      </span>
-      <span>
-        <Icon type="github" style={{fontSize: 18, marginRight: 4}} />
-        <span className={styles.name}>{userInfo.name}</span>
-      </span>
+        </span>
+        <span style={{float:'right'}}>
+          <Icon type="github" style={{fontSize: 18, marginRight: 4}} />
+          <span className={styles.name}>{userInfo.name}</span>
+        </span>
+      </div>
+
     </div>
   )
 }

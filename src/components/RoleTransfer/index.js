@@ -4,13 +4,14 @@ import { connect } from 'dva';
 import PropTypes from 'prop-types';
 const { TreeNode } = Tree;
 
-const obj = { permission: '权限', route: '菜单' };
+const obj = {role:'角色',permission: '权限', route: '菜单' };
 
 // Customize Table Transfer
 const isChecked = (selectedKeys, eventKey) => {
   return selectedKeys.indexOf(eventKey) !== -1;
 };
 
+// 递归渲染treeNode
 const generateTree = (treeNodes = [], checkedKeys = []) => {
   return treeNodes.map(({ children, ...props }) => (
     <TreeNode
@@ -24,8 +25,10 @@ const generateTree = (treeNodes = [], checkedKeys = []) => {
   ));
 };
 
+// 渲染treeTransfer组件
 const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
   const transferDataSource = [];
+  // 生成右边框里的总数据函数
   function flatten(list = []) {
     list.forEach(item => {
       transferDataSource.push({ key: item.id.toString(), title: item.name });
@@ -53,9 +56,9 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
           });
           return (
             <div>
-              {Object.keys(authList).map(item => {
+              {Object.keys(authList).map((item,index) => {
                 return (
-                  <div key={item.code}>
+                  <div key={index}>
                     <h3>{obj[item]}</h3>
                     <Tree
                       blockNode
@@ -99,7 +102,7 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
 };
 
 @connect(
-  ({ authAssign, loading }) => ({
+  ({ authAssign }) => ({
     forRoleData: authAssign.forRoleData,
   }),
   dispatch => ({
