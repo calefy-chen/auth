@@ -38,6 +38,7 @@ function FormatVal(value) {
     loadData: params => dispatch({ type: 'system/getSystemList', payload: params }),
     updataStatus: params => dispatch({ type: 'system/updateSystemAlarmStatus', payload: params }), // 确认误报
     deleteAlarm: params => dispatch({ type: 'system/deleteSystemAlarmById', payload: params }), // 删除
+    getAlarmCount: () => dispatch({ type: 'system/getSystemAlarmTypeCount' }), // 各系统大类总数量
     cleanDetail: () => dispatch({ type: 'system/cleanDetail' }),
   })
 )
@@ -152,8 +153,10 @@ class SystemWarning extends Component {
 
   // 一个流程处理完成
   handleFlowEnd() {
+    const { getAlarmCount } = this.props
     this.handleHideDetail();
     this.listRef.current.gotoPage(1);
+    getAlarmCount()
   }
 
   // 误报二次确认
@@ -179,7 +182,7 @@ class SystemWarning extends Component {
 
   // 删除
   handleDel(record) {
-    const { deleteAlarm } = this.props;
+    const { deleteAlarm, getAlarmCount } = this.props;
     const that = this;
     confirm({
       title: '是否删除该预警？',
@@ -192,6 +195,7 @@ class SystemWarning extends Component {
           if (res.code) {
             message.success('删除成功');
             that.listRef.current.gotoPage(1);
+            getAlarmCount()
           }
         });
       },
