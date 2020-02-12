@@ -6,7 +6,7 @@
  * @Description: file content
  */
 import React, { PureComponent } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Badge } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import styles from './index.less';
@@ -29,12 +29,15 @@ const icons = {
   }),
   dispatch => ({
     getDataType: () => dispatch({ type: 'system/queryDictByDictId' }), // 查询系统类型、预警大类、预警细类
+    getAlarmType: () => dispatch({ type: 'system/getSystemAlarmTypeCount' }), // 各系统大类总数量
   })
 )
 class SiderMenu extends PureComponent {
   componentDidMount() {
-    const { getDataType } = this.props;
-    getDataType();
+    const { getDataType, getAlarmType } = this.props;
+    getDataType().then(res => {
+      getAlarmType();
+    });
   }
   
   render() {
@@ -64,8 +67,9 @@ class SiderMenu extends PureComponent {
               <Link
                 to={`/system/${item.value}`}
               >
-                <Icon style={{fontSize: 14}} type={icons[index]} />
+                <Icon style={{fontSize: 16}} type={icons[index]} />
                 <span>{item.name}</span>
+                <Badge count={item.num} />
               </Link>
             </Menu.Item>
           ))}

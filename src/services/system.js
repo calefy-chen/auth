@@ -63,3 +63,8 @@ export function addSystemAlarm(params) {
 export function getLinkLogList(params) {
   return get('/sys_inspect/systemAlarm/getLinkLogList', params);
 }
+
+// 各系统大类总数量
+export function getSystemAlarmTypeCount() {
+  return get('/sys_inspect/systemAlarm/getSystemAlarmTypeCount');
+}

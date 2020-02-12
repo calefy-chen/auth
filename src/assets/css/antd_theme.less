@@ -54,6 +54,11 @@
 :global {
   // 左边的menu
   .MenuSider {
+    .ant-badge-count {
+      margin-left: 6px;
+      box-shadow: none;
+    }
+    
     .ant-layout-sider-children {
       display: flex;
       flex-direction: column;
@@ -68,12 +73,16 @@
 
     .ant-menu-item .anticon,
     .ant-menu-submenu-title .anticon {
-      margin-right: 17px;
+      margin-right: 12px;
     }
 
     .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected,
     .ant-menu-submenu-selected {
       background-color: @themeColor;
+      .ant-badge-count {
+        color: @themeColor;
+        background: #fff;
+      }
     }
 
     .ant-menu-sub.ant-menu-inline {

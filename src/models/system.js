@@ -80,6 +80,15 @@ export default {
       })
       return data
     },
+    // 各系统大类总数量
+    * getSystemAlarmTypeCount(_, { put, call }) {
+      const { data } = yield call(api.getSystemAlarmTypeCount)
+      yield put({
+        type: 'setAlarmTypeCount',
+        payload: data || {},
+      })
+      return data
+    },
   },
 
   reducers: {
@@ -103,7 +112,7 @@ export default {
       return {
         ...state,
         systemType: (payload.systemType || []).map((item) => ({ value: item.typeId, name: item.typeName })),
-        alarmBigList: (payload.alarmBigList || []).map((item) => ({ value: item.typeId, name: item.typeName })),
+        alarmBigList: (payload.alarmBigList || []).map((item) => ({ value: item.typeId, name: item.typeName, num: 0 })),
         alarmMinList: (payload.alarmMinList || []).map((item) => ({ value: item.typeId, name: item.typeName })),
       }
     },
@@ -111,6 +120,19 @@ export default {
       return {
         ...state,
         logs: payload
+      }
+    },
+    setAlarmTypeCount(state, { payload }) {
+      return {
+        ...state,
+        alarmBigList:  state.alarmBigList.map(item => {
+          (payload || []).forEach(list => {
+            if (item.value === list.alarmType) {
+              item.num = list.num
+            }
+          })
+          return item
+        })
       }
     },
     cleanDetail(state) {
