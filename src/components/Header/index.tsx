@@ -25,7 +25,7 @@ const Header = ({
       <span></span>
       <span>
         <span className={styles.name}>{user.name}</span>
-        <span className={styles.out} onClick={onLogout}>退出</span>
+        <span className={styles.out} onClick={onLogout}>??</span>
       </span>
     </div>
   )
