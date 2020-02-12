@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { Icon } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 import styles from './index.less';
@@ -25,7 +24,6 @@ const Header = ({
     <div className={styles.header}>
       <span></span>
       <span>
-        <Icon type="github" style={{fontSize: 20, marginRight: 4}} />
         <span className={styles.name}>{user.name}</span>
         <span className={styles.out} onClick={onLogout}>退出</span>
       </span>

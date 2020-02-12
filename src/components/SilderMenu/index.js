@@ -15,6 +15,14 @@ import logo from '@/assets/logo.png';
 const { Sider } = Layout
 const theme = 'light'
 
+const icons = {
+  0: 'clock-circle',
+  1: 'fund',
+  2: 'carry-out',
+  3: 'container',
+  4: 'database',
+}
+
 @connect(
   ({ system }) => ({
     alarmBigList: system.alarmBigList,
@@ -51,12 +59,12 @@ class SiderMenu extends PureComponent {
           selectedKeys={selectedKeys}
           style={{ width: '100%', flex: 1, overflow: 'auto', overflowX: 'hidden' }}
         >
-          {alarmBigList.map(item => (
+          {alarmBigList.map((item, index) => (
             <Menu.Item key={`/system/${item.value}`}>
               <Link
                 to={`/system/${item.value}`}
               >
-                <Icon style={{fontSize: 14}} type="clock-circle" />
+                <Icon style={{fontSize: 14}} type={icons[index]} />
                 <span>{item.name}</span>
               </Link>
             </Menu.Item>
