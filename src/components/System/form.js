@@ -201,7 +201,7 @@ class SumbitForm extends Component {
           {getFieldDecorator('alarmTitle', {
             rules: [
               { required: true, message: '请输入预警摘要' },
-              { max: 20, message: '长度不超过20个字符' },
+              { max: 30, message: '长度不超过30个字符' },
             ],
           })(<Input placeholder="请输入预警摘要" allowClear />)}
         </Form.Item>
@@ -209,7 +209,7 @@ class SumbitForm extends Component {
           {getFieldDecorator('alarmDesc', {
             rules: [
               { required: true, message: '请输入预警内容' },
-              { max: 20, message: '长度不超过20个字符' },
+              { max: 30, message: '长度不超过30个字符' },
             ],
           })(<Input placeholder="请输入预警内容" allowClear />)}
         </Form.Item>
