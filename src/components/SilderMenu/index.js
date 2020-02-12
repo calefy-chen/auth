@@ -10,7 +10,7 @@ import { Layout, Menu, Icon, Badge } from 'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import styles from './index.less';
-import logo from '@/assets/logo.png';
+import logo from '@/assets/company.png';
 
 const { Sider } = Layout
 const theme = 'light'
