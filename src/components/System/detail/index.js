@@ -73,9 +73,9 @@ class FlowDetailIndex extends Component {
                 <Descriptions.Item label="预警id">{detail.alarmId}</Descriptions.Item>
                 <Descriptions.Item label="预警IP">{detail.sourceIp}</Descriptions.Item>
                 <Descriptions.Item label="预警时间">{detail.alarmTime}</Descriptions.Item>
-                <Descriptions.Item label="来源系统">{detail.alarmSource}</Descriptions.Item>
-                <Descriptions.Item label="预警大类">{detail.alarmType}</Descriptions.Item>
-                <Descriptions.Item label="预警细类">{detail.subType}</Descriptions.Item>
+                <Descriptions.Item label="来源系统">{detail.alarmSourceName}</Descriptions.Item>
+                <Descriptions.Item label="预警大类">{detail.alarmTypeName}</Descriptions.Item>
+                <Descriptions.Item label="预警细类">{detail.subTypeName}</Descriptions.Item>
                 <Descriptions.Item label="预警摘要">{detail.alarmTitle}</Descriptions.Item>
                 <Descriptions.Item label="预警内容">{detail.alarmDesc}</Descriptions.Item>
                 <Descriptions.Item label="是否已推送预警">
@@ -96,11 +96,14 @@ class FlowDetailIndex extends Component {
               </Descriptions>
             </div>
           </TabPane>
-          <TabPane tab="链路日志" key="2">
-            <div style={{ marginTop: 20 }}>
-              <FlowLogs alarmId={id} />
-            </div>
-          </TabPane>
+          {/* 判断sqsIsTrue是否合格来显示链路日志，1合格、2不合格 */}
+          {detail.sqsIsTrue === 1 && (
+            <TabPane tab="链路日志" key="2">
+              <div style={{ marginTop: 20 }}>
+                <FlowLogs alarmId={id} />
+              </div>
+            </TabPane>
+          )}
         </Tabs>
         <Collapse defaultActiveKey={['1']} style={{ marginTop: 20 }}>
           <Panel header="处置表单" key="1">

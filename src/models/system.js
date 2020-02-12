@@ -76,7 +76,7 @@ export default {
       const { data } = yield call(api.getLinkLogList, payload)
       yield put({
         type: 'setLinkLogList',
-        payload: data || {},
+        payload: data || [],
       })
       return data
     },
@@ -85,7 +85,7 @@ export default {
       const { data } = yield call(api.getSystemAlarmTypeCount)
       yield put({
         type: 'setAlarmTypeCount',
-        payload: data || {},
+        payload: data || [],
       })
       return data
     },
