@@ -24,6 +24,7 @@ export default {
     // 登录
     *login({ payload }, { call, put }) {
       const { account, passwd } = payload;
+      window.CMS_OA_CODE = account;
       const res = yield call(api.login, {
         oaCode: account,
         passwd: rsaEncrypt(passwd),
@@ -47,6 +48,8 @@ export default {
       const { data } = yield call(api.current);
       if (data) {
         yield put({ type: 'user', payload: data });
+        const account = (data.account || '').toLowerCase();
+        window.CMS_OA_CODE = account;
       }
       return data;
     },

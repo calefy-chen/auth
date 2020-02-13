@@ -24,7 +24,7 @@ import styles from './logs.less';
 class Logs extends Component {
   getData(item) {
     const data = [
-      { label: '响应', value: item.requestTime },
+      { label: '响应', value: item.requestTime !== '-' ? `${item.requestTime}毫秒` : item.requestTime },
       { label: '参数', value: item.request },
       { label: 'URl', value: item.remoteAddr },
     ];
