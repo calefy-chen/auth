@@ -57,7 +57,7 @@ class Logs extends Component {
                 <div className={styles.recordTitle}>
                   <div className={styles.recordTitleTime}>
                     <p>{timeString(item.createTime, 'YYYY-MM-DD')}</p>
-                    <p>{timeString(item.createTime, 'HH:mm')}</p>
+                    <p>{timeString(item.createTime, 'HH:mm:ss')}</p>
                   </div>
                   <div className={styles.recordTitleText}>{item.logType}</div>
                 </div>
