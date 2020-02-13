@@ -57,7 +57,7 @@ class Logs extends Component {
                 <div className={styles.recordTitle}>
                   <div className={styles.recordTitleTime}>
                     <p>{timeString(item.createTime, 'YYYY-MM-DD')}</p>
-                    <p>{timeString(item.createTime, 'HH:mm:ss')}</p>
+                    <p>{timeString(item.createTime, 'HH:mm:ss.SSS')}</p>
                   </div>
                   <div className={styles.recordTitleText}>{item.logType}</div>
                 </div>
@@ -81,7 +81,7 @@ class Logs extends Component {
         {data.map((items, index) => (
           <div key={index}>
             <span className={styles.label}>{items.label}：</span>
-            {items.value}
+            <span dangerouslySetInnerHTML={{ __html: items.value }}></span>
           </div>
         ))}
       </div>
