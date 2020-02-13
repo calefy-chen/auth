@@ -206,7 +206,7 @@ class SumbitForm extends Component {
             ],
           })(<Input placeholder="请输入预警摘要" allowClear />)}
         </Form.Item>
-        <Form.Item label="预警内容" labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
+        <Form.Item label="预警内容" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
           {getFieldDecorator('alarmDesc', {
             rules: [
               { required: true, message: '请输入预警内容' },
@@ -249,7 +249,7 @@ class SumbitForm extends Component {
                 ],
               })(<Input placeholder="请输入处理人" allowClear />)}
             </Form.Item>
-            <Form.Item label="处理信息" labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
+            <Form.Item label="处理信息" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
               {getFieldDecorator('disDetail', {
                 rules: [
                   { required: isDisFlag, message: '请输入处理信息' },
@@ -259,11 +259,11 @@ class SumbitForm extends Component {
             </Form.Item>
           </>  
         )}
-        <Form.Item wrapperCol={{ span: 18, offset: 4 }} style={{ textAlign: 'right' }}>
+        <Form.Item wrapperCol={{ span: 16, offset: 4 }} style={{ textAlign: 'right' }}>
           <Button type="primary" onClick={this.handleAdd} loading={addLoading}>
             确定
           </Button>
-          <Button style={{marginLeft: 10}} onClick={onClose}>
+          <Button style={{marginLeft: 18}} onClick={onClose}>
             取消
           </Button>
         </Form.Item>
