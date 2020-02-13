@@ -105,6 +105,9 @@ class FlowDetailIndex extends Component {
             </TabPane>
           )}
         </Tabs>
+        {detail.sqsIsTrue === 1 && (
+          <span className={styles.request}>请求ID：{detail.alarmId}</span>
+        )}
         <Collapse defaultActiveKey={['1']} style={{ marginTop: 20 }}>
           <Panel header="处置表单" key="1">
             <SubmitForm onEnd={onEnd} alarmId={id} noModal />
