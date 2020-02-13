@@ -49,11 +49,11 @@ const config: IConfig =  {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'Auth',
+      title: '统一运维监控',
       links: [{
         rel: 'icon',
         type: 'image/x-icon',
-        href: 'favicon.ico'
+        href: 'favicon.png'
       }],
       dll: true,
       locale: {
