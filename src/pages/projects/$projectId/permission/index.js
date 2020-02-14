@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 19:47:06
+ * @LastEditTime : 2020-02-14 18:07:43
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -33,12 +33,14 @@ class index extends Component {
     const { dragItem } = this.props;
     const id = info.dragNode.props.dataRef.id;
     let parentId;
+    let level = info.node.props.pos.split('-').pop() - 0 + 1;
     if (!info.dropToGap) {
       parentId = info.node.props.dataRef.id;
+      level = info.node.props.dataRef.children.length
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    const level = info.node.props.pos.split('-').pop() - 0 + 1;
+    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {
@@ -155,12 +157,12 @@ class index extends Component {
           {loading ? (
             <Spin />
           ) : get(toWhoData, 'roles', []).length || get(toWhoData, 'users', []).length ? (
-            <Descriptions>
+            <Descriptions  bordered size="small">
               {get(toWhoData, 'roles', []).length && toWhoData['roles'] ? (
-                <Descriptions.Item label="角色">{toWhoData['roles']}</Descriptions.Item>
+                <Descriptions.Item label="角色" span={3}>{toWhoData['roles']}</Descriptions.Item>
               ) : null}
               {get(toWhoData, 'users', []).length ? (
-                <Descriptions.Item label="人员">{toWhoData['users']}</Descriptions.Item>
+                <Descriptions.Item label="人员" span={3}>{toWhoData['users'].map(item => item.userName).join(',')}</Descriptions.Item>
               ) : null}
             </Descriptions>
           ) : (

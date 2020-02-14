@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-12 14:15:18
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 20:08:22
+ * @LastEditTime : 2020-02-14 16:47:39
  * @Description: file conte
  */
 import React, { Component } from 'react';
@@ -28,7 +28,7 @@ class toRoleForm extends Component {
     if(pre.roleId !== roleId && roleId){
       getAuthAssignForRole(roleId).then(res => {
         this.setState({
-          roleData:res.data
+          roleData:res.data.map(item => item.toString())
         })
       });
     }

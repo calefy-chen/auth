@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-10 13:42:19
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 16:04:13
+ * @LastEditTime : 2020-02-14 14:37:56
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -59,7 +59,7 @@ class perForm extends Component {
             message.success('处理成功');
             onEditEnd();
           } else {
-            message.error(res.message);
+          message.error(res.message);
           }
         });
       } else {

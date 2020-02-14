@@ -104,6 +104,7 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
 @connect(
   ({ authAssign }) => ({
     forRoleData: authAssign.forRoleData,
+    forUserData: authAssign.forUserData,
   }),
   dispatch => ({
   }),
@@ -111,14 +112,23 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
 class Index extends React.Component {
   static propTypes={
     treeData:PropTypes.object.isRequired,
-    onTransfer:PropTypes.func
+    onTransfer:PropTypes.func,
+    roleType:PropTypes.string
+  }
+  static defaultProps = {
+    roleType:'role'
   }
   state = {
     targetKeys: [],
   };
   componentDidMount() {
-    const {forRoleData} = this.props
-    this.setState({targetKeys:forRoleData})
+    const {forRoleData,roleType,forUserData} = this.props
+    if(roleType==='role'){
+      this.setState({targetKeys:forRoleData})
+    }else{
+      this.setState({targetKeys:forUserData})
+    }
+
   }
   onChange = targetKeys => {
     const {onTransfer} = this.props

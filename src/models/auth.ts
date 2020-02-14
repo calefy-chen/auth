@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 14:55:13
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 19:05:45
+ * @LastEditTime : 2020-02-14 17:03:38
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -13,13 +13,10 @@ const Auth: Model = {
   namespace: 'auth',
   state: {
     authList: {},
-    tabKey:'role'
+    tabKey:'user'
   },
 
   effects: {
-    *getTypeKey({ payload },{put}){
-      yield put({ type: 'setTypeKey', payload: payload })
-    },
     *getAuthList({ payload }, { call, put }) {
       const res = yield call(api.getAuthList, payload);
       if (res && res.data) {

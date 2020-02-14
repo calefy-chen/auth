@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 19:19:16
+ * @LastEditTime : 2020-02-13 09:44:41
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -29,12 +29,14 @@ class index extends Component {
     const { dragItem } = this.props;
     const id = info.dragNode.props.dataRef.id;
     let parentId;
+    let level = info.node.props.pos.split('-').pop() - 0 + 1;
     if (!info.dropToGap) {
       parentId = info.node.props.dataRef.id;
+      level = info.node.props.dataRef.children.length
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    const level = info.node.props.pos.split('-').pop() - 0 + 1;
+    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {
