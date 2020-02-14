@@ -149,11 +149,12 @@ class SumbitForm extends Component {
       systemType,
       alarmBigList,
       alarmMinList,
+      onClose,
     } = this.props;
     const isDisFlag = getFieldValue('disFlag') === '1'
     return (
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-        <Form.Item label="来源系统" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="来源系统" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('alarmSource', {
             initialValue: '',
             rules: [{ required: true, message: '请选择来源系统' }],
@@ -166,12 +167,12 @@ class SumbitForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="来源IP" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="来源IP" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('sourceIp', {
             rules: [{ required: true, message: '请输入来源IP' }],
           })(<Input placeholder="请输入来源IP" allowClear />)}
         </Form.Item>
-        <Form.Item label="预警大类" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="预警大类" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('alarmType', {
             initialValue: '',
             rules: [{ required: true, message: '请选择预警大类' }],
@@ -184,7 +185,7 @@ class SumbitForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="预警分类" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="预警分类" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('subType', {
             initialValue: '',
             rules: [{ required: true, message: '请选择预警分类' }],
@@ -197,7 +198,7 @@ class SumbitForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="预警摘要" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="预警摘要" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('alarmTitle', {
             rules: [
               { required: true, message: '请输入预警摘要' },
@@ -205,15 +206,15 @@ class SumbitForm extends Component {
             ],
           })(<Input placeholder="请输入预警摘要" allowClear />)}
         </Form.Item>
-        <Form.Item label="预警内容" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="预警内容" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
           {getFieldDecorator('alarmDesc', {
             rules: [
               { required: true, message: '请输入预警内容' },
-              { max: 30, message: '长度不超过30个字符' },
+              { max: 30, message: '长度不超过1000个字符' },
             ],
-          })(<Input placeholder="请输入预警内容" allowClear />)}
+          })(<Input.TextArea placeholder="请输入预警内容" rows={4} style={{ marginTop: 5 }} />)}
         </Form.Item>
-        <Form.Item label="是否被投诉" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="是否被投诉" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('cmpFlag', {
             initialValue: '',
           })(
@@ -225,7 +226,7 @@ class SumbitForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="是否处理" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+        <Form.Item label="是否处理" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
           {getFieldDecorator('disFlag', {
             initialValue: '',
           })(
@@ -239,7 +240,7 @@ class SumbitForm extends Component {
         </Form.Item>
         {isDisFlag && (
           <>
-            <Form.Item label="处理人" labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
+            <Form.Item label="处理人" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
               {getFieldDecorator('disUsr', {
                 rules: [
                   { required: isDisFlag, message: '请输入处理人' },
@@ -248,7 +249,7 @@ class SumbitForm extends Component {
                 ],
               })(<Input placeholder="请输入处理人" allowClear />)}
             </Form.Item>
-            <Form.Item label="处理信息">
+            <Form.Item label="处理信息" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
               {getFieldDecorator('disDetail', {
                 rules: [
                   { required: isDisFlag, message: '请输入处理信息' },
@@ -258,9 +259,12 @@ class SumbitForm extends Component {
             </Form.Item>
           </>  
         )}
-        <Form.Item wrapperCol={{ span: 18, offset: 4 }} style={{ textAlign: 'right' }}>
+        <Form.Item wrapperCol={{ span: 16, offset: 4 }} style={{ textAlign: 'right' }}>
           <Button type="primary" onClick={this.handleAdd} loading={addLoading}>
             确定
+          </Button>
+          <Button style={{marginLeft: 18}} onClick={onClose}>
+            取消
           </Button>
         </Form.Item>
       </Form>
@@ -278,7 +282,7 @@ class SumbitForm extends Component {
       <Modal
         visible={!!type}
         title="添加"
-        width={800}
+        width={600}
         centered={false}
         footer={null}
         onCancel={onClose}
