@@ -2,7 +2,7 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 20:51:37
+ * @LastEditTime : 2020-02-14 21:46:50
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -25,7 +25,6 @@ const authAssign: Model = {
   effects: {
     *searchUser({ payload }, { call }) {
       const { keyword } = payload;
-      console.log(keyword, 'keyword');
       const res = yield call(api.searchUser, keyword);
       return res;
     },
@@ -36,7 +35,6 @@ const authAssign: Model = {
     },
     *authAssignToUser({ payload }, { call }) {
       const { projectId, userId, userName, orgId, items } = payload;
-      console.log(payload,'authAssign/authAssignToUser')
       const res = yield call(api.authAssignToUser, projectId, userId, userName, orgId, items);
       return res;
     },
@@ -74,13 +72,11 @@ const authAssign: Model = {
       const res_1 = yield call(api.getOaList);
       const res_2 = yield call(api.getSelfDept);
       const res = res_1.data.concat(res_2.data)
-      console.log(res)
       yield put({ type: 'setAddressList', payload: res });
       return res;
     },
     *getByOrgId({ payload }, { call, put }) {
       const { orgId,isAddress } = payload;
-      console.log(orgId, 'orgId');
       const res = yield call(api.getByOrgId, orgId[0]);
       if (res && res.data) {
         if(isAddress){

@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-13 10:02:58
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:15:10
+ * @LastEditTime : 2020-02-14 21:47:26
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -104,7 +104,6 @@ class index extends Component {
   onSearch = searchText => {
     const { searchUser } = this.props;
     searchUser({ keyword: searchText }).then(res => {
-      console.log(res);
       this.setState({
         searchData: res.data.map(item => (
           <Option key={item.oaCode + '-' + item.name}>{item.name}</Option>
@@ -113,7 +112,6 @@ class index extends Component {
     });
   };
   onSelect = value => {
-    console.log('onSelect', value);
     this.setState({
       sendUserId: value.split('-')[0],
       sendUserName: value.split('-')[1],
@@ -198,7 +196,6 @@ class index extends Component {
     if (!sendUserId) {
       message.error('请选择人员');
     } else {
-      console.log(projectId, 'projectId');
       authAssignToUser({
         projectId,
         items: userRoleData.join(','),
@@ -233,7 +230,6 @@ class index extends Component {
     });
   };
   onAddressChange = data => {
-    console.log(data, '---->');
     this.setState({
       sendUserName: data.userName,
       sendUserId: data.userId,
@@ -251,7 +247,6 @@ class index extends Component {
       authData,
     } = this.props;
     const { title, roleVisible, searchData, userId, sendUserName, drawerVisible } = this.state;
-    console.log(this.state.userRoleData, '------');
     return (
       <>
         <Row>
