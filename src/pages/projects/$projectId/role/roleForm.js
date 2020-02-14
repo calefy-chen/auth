@@ -83,7 +83,6 @@ class perForm extends Component {
     getAuthAssignForRole(value);
   };
   renderTree = data => {
-    console.log('树形菜单数据源', data);
     return data.map(item => {
       if (!item.children) {
         return <TreeNode title={item.name} key={item.id} value={item.id} />;

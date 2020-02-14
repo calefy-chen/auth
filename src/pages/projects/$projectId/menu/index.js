@@ -36,7 +36,6 @@ class index extends Component {
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {

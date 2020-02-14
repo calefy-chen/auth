@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 15:19:25
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 17:03:20
+ * @LastEditTime : 2020-02-14 21:51:05
  * @Description: file content
  */
 /*
@@ -51,7 +51,6 @@ class index extends Component {
   tabChange = key => {
     const { setTypeKey } = this.props;
     setTypeKey(key);
-    console.log(key);
   };
   render() {
     const { detailData,authList,tabKey } = this.props;
@@ -65,7 +64,7 @@ class index extends Component {
             <span style={{fontSize:14,fontWeight:500}}>{detailData.name}</span>
           </Breadcrumb.Item>
         </Breadcrumb>
-        <Tabs defaultActiveKey="user" onChange={this.tabChange} size="large">
+        <Tabs defaultActiveKey="role" onChange={this.tabChange} size="large">
           <TabPane tab="角色" key="role">
             {isEmpty(authList) ? <Spin /> : <Role />}
           </TabPane>

@@ -40,7 +40,6 @@ class index extends Component {
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {
@@ -67,11 +66,9 @@ class index extends Component {
       perDetail: item,
       parentId: parentId,
     });
-    console.log(item, parentId, '1');
   }
   deletePer(item, parentId) {
     const { fetchAuthList, deleteAuth, projectId } = this.props;
-    console.log(item, 'xxx');
     confirm({
       title: `您确认要删除"${item.name}"吗？`,
       cancelText: '取消',

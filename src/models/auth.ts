@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 14:55:13
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 17:03:38
+ * @LastEditTime : 2020-02-14 21:50:45
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -13,7 +13,7 @@ const Auth: Model = {
   namespace: 'auth',
   state: {
     authList: {},
-    tabKey:'user'
+    tabKey:'role'
   },
 
   effects: {

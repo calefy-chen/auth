@@ -37,7 +37,6 @@ class index extends Component {
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {
@@ -64,7 +63,6 @@ class index extends Component {
       roleDetail: item,
       parentId: parentId,
     });
-    console.log(item, parentId, '1');
   }
   deletePer(item, parentId) {
     const { fetchAuthList, deleteAuth, projectId } = this.props;
