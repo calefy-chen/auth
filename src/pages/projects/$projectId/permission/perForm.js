@@ -55,7 +55,6 @@ class perForm extends Component {
           }
         })
       }
-      console.log(parmas,perDetail,'xxx')
     });
   }
   render() {

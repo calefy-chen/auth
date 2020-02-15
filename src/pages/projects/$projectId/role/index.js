@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 19:36:45
+ * @LastEditTime : 2020-02-12 20:03:35
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -37,7 +37,6 @@ class index extends Component {
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
-    console.log(info,'level')
     dragItem({ id, parentId, level });
   };
   onOption = (item, parentId, type) => {
@@ -64,11 +63,9 @@ class index extends Component {
       roleDetail: item,
       parentId: parentId,
     });
-    console.log(item, parentId, '1');
   }
   deletePer(item, parentId) {
     const { fetchAuthList, deleteAuth, projectId } = this.props;
-    console.log(item, 'xxx');
     confirm({
       title: `您确认要删除"${item.name}"吗？`,
       cancelText: '取消',
@@ -159,7 +156,8 @@ class index extends Component {
           maskClosable={false}
           footer={null}
         >
-          {roleVisible ? <ToRoleForm roleId={roleDetail.id} cancel={this.roleHideModal} onEditEnd={this.onEditToRole}/> : null}
+          {/* {roleVisible ? <ToRoleForm roleId={roleDetail.id} cancel={this.roleHideModal} onEditEnd={this.onEditToRole}/> : null} */}
+          <ToRoleForm roleId={roleDetail.id} cancel={this.roleHideModal} onEditEnd={this.onEditToRole}/>
         </Modal>
       </>
     );

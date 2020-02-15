@@ -2,7 +2,7 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-06 12:32:16
+ * @LastEditTime : 2020-02-13 11:00:39
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
@@ -20,6 +20,11 @@ const config: IConfig =  {
       changeOrigin: true,
       pathRewrite: { '^/authsys': '' },
     },
+    '/api': {
+      target: 'http://47.113.114.129:3000',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    }
   },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html

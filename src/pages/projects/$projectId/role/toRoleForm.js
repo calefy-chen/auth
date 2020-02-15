@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-12 14:15:18
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 16:50:54
+ * @LastEditTime : 2020-02-14 21:52:56
  * @Description: file conte
  */
 import React, { Component } from 'react';
@@ -22,16 +22,16 @@ import RoleTransfer from '@/components/RoleTransfer';
 )
 class toRoleForm extends Component {
   state = { roleData: '' };
-  componentDidMount() {
+  componentDidUpdate(pre) {
     const { roleId, getAuthAssignForRole } = this.props;
-    console.log(roleId,'roleId')
-    if (roleId) {
+    if(pre.roleId !== roleId && roleId){
       getAuthAssignForRole(roleId).then(res => {
         this.setState({
-          roleData:res.data
+          roleData:res.data.map(item => item.toString())
         })
       });
     }
+
   }
   onTransfer = roleData => {
     this.setState({
@@ -41,7 +41,6 @@ class toRoleForm extends Component {
   handleSubmit = () => {
     const { authAssignToRole, roleId,onEditEnd } = this.props;
     const { roleData } = this.state;
-    console.log(roleData,'roleData')
     authAssignToRole({ roleId:roleId, items: roleData.join(',') }).then(res => {
       if (res.code === 200) {
         message.success('处理成功');

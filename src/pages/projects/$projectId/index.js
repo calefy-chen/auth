@@ -2,7 +2,14 @@
  * @Author: 王硕
  * @Date: 2020-02-05 15:19:25
  * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 18:42:57
+ * @LastEditTime : 2020-02-14 21:51:05
+ * @Description: file content
+ */
+/*
+ * @Author: 王硕
+ * @Date: 2020-02-05 15:19:25
+ * @LastEditors  : 王硕
+ * @LastEditTime : 2020-02-13 10:02:43
  * @Description: file content
  */
 /**
@@ -14,6 +21,7 @@ import { connect } from 'dva';
 import Role from './role';
 import Permission from './permission';
 import Menu from './menu';
+import User from './user';
 import isEmpty from 'lodash/isEmpty'
 
 const { TabPane } = Tabs;
@@ -21,12 +29,13 @@ const { TabPane } = Tabs;
   ({ project, auth, loading }) => ({
     detailData: project.projectDetail,
     authList: auth.authList,
+    tabKey:auth.tabKey,
     loading: loading.effects['auth/getAuthList'],
   }),
   dispatch => ({
     fetchDetail: payload => dispatch({ type: 'project/getProjectDetail', payload }),
     fetchAuthList: payload => dispatch({ type: 'auth/getAuthList', payload }),
-    getTypeKey: payload => dispatch({ type: 'auth/getTypeKey', payload }),
+    setTypeKey: payload => dispatch({ type: 'auth/setTypeKey', payload }),
   }),
 )
 class index extends Component {
@@ -40,12 +49,11 @@ class index extends Component {
     fetchAuthList(params.projectId);
   }
   tabChange = key => {
-    const { getTypeKey } = this.props;
-    getTypeKey(key);
-    console.log(key);
+    const { setTypeKey } = this.props;
+    setTypeKey(key);
   };
   render() {
-    const { detailData,authList } = this.props;
+    const { detailData,authList,tabKey } = this.props;
     return (
       <div>
         <Breadcrumb separator="/">
@@ -65,6 +73,9 @@ class index extends Component {
           </TabPane>
           <TabPane tab="权限" key="permission">
             {isEmpty(authList)  ? <Spin /> : <Permission />}
+          </TabPane>
+          <TabPane tab="人员" key="user">
+            {tabKey=== 'user'? <User/>:null}
           </TabPane>
         </Tabs>
       </div>
