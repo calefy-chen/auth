@@ -106,7 +106,7 @@ class FlowDetailIndex extends Component {
           )}
         </Tabs>
         {detail.sqsIsTrue === 1 && (
-          <span className={styles.request}>请求ID：{detail.alarmId}</span>
+          <span className={styles.request}>seq_id：{detail.alarmTitle}</span>
         )}
         <Collapse defaultActiveKey={['1']} style={{ marginTop: 20 }}>
           <Panel header="处置表单" key="1">
