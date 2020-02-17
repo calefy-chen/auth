@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-13 09:44:41
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:32:35
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -18,26 +18,12 @@ const { confirm } = Modal;
     authList: auth.authList
   }),
   dispatch => ({
-    dragItem: payload => dispatch({ type: 'auth/dragItem', payload }),
     deleteAuth:payload => dispatch({ type: 'auth/deleteAuth', payload }),
     fetchAuthList: payload => dispatch({ type: 'auth/getAuthList', payload }),
   }),
 )
 class index extends Component {
   state = { visible: false, menuDetail: {}, parentId: '' };
-  onDrop = info => {
-    const { dragItem } = this.props;
-    const id = info.dragNode.props.dataRef.id;
-    let parentId;
-    let level = info.node.props.pos.split('-').pop() - 0 + 1;
-    if (!info.dropToGap) {
-      parentId = info.node.props.dataRef.id;
-      level = info.node.props.dataRef.children.length
-    } else {
-      parentId = info.node.props.dataRef.parentId;
-    }
-    dragItem({ id, parentId, level });
-  };
   onOption = (item, parentId, type) => {
     switch (type) {
       case 'edit':
@@ -100,7 +86,7 @@ class index extends Component {
   };
   render() {
     const { visible, menuDetail, parentId } = this.state;
-    const iconData = { edit: '编辑', delete: '删除', 'plus-square': '新增' };
+    const iconData = {'plus-square': '添加' , edit: '编辑', delete: '删除'};
     return (
       <>
       <Button type="primary" onClick={()=>this.addMenu('')}>

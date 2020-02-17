@@ -6,6 +6,7 @@ import router from 'umi/router';
 import { connect } from 'dva';
 import { Form, Button, Input, Icon, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import Cookies from 'js-cookie'
 import styles from './index.css';
 
 // 登录上传参数
@@ -18,6 +19,7 @@ interface LoginParams {
 interface LoginProps {
   loginLoading: boolean;
   form: WrappedFormUtils;
+  fetchCurrent(): Promise<any>;
   login(payload: LoginParams): Promise<any>;
 }
 
@@ -27,6 +29,7 @@ interface LoginProps {
 const Login = ({
   loginLoading,
   login,
+  fetchCurrent,
   form: { getFieldDecorator, validateFields },
 }: LoginProps) => {
   // 执行登录
@@ -36,8 +39,11 @@ const Login = ({
       if (errors) return;
       login(values).then(res => {
         if (res.code === 200) {
-          router.push('/');
+          Cookies.set('auth.token',res.data.token)
+          fetchCurrent()
         }
+      }).then(u => {
+        router.push('/');
       });
     });
   }, []);
@@ -73,5 +79,6 @@ export default connect(
   }),
   dispatch => ({
     login: (payload: LoginParams) => dispatch({ type: 'user/login', payload }),
+    fetchCurrent: () => dispatch({ type: 'user/current' }),
   }),
 )(Form.create()(Login));

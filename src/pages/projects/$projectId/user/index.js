@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-13 10:02:58
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:47:26
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 17:07:49
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -21,6 +21,7 @@ import {
   Button,
   message,
   AutoComplete,
+  Descriptions,
 } from 'antd';
 import { connect } from 'dva';
 import RoleTransfer from '@/components/RoleTransfer';
@@ -46,14 +47,15 @@ function debounce(func, wait) {
 
 @connect(
   ({ auth, project, authAssign, loading }) => ({
+    authData: auth.authData,
     projectId: project.projectDetail.id,
     branchVo: authAssign.branchVo,
     BranchLoading: loading.effects['authAssign/queryBranchVo'],
     OrgIdLoading: loading.effects['authAssign/getByOrgId'],
     submitLoading: loading.effects['authAssign/authAssignToUser'],
     forUseLoading: loading.effects['authAssign/getAuthAssignForUser'],
-    userMsg: authAssign.userMsg,
-    authData: auth.authList,
+    userInfo: authAssign.userInfo,
+    authList: auth.authList,
   }),
   dispatch => ({
     searchUser: payload => dispatch({ type: 'authAssign/searchUser', payload }),
@@ -80,7 +82,14 @@ class index extends Component {
       {
         title: '操作',
         dataIndex: 'oaCode',
-        render: (text, recard) => <a onClick={() => this.editRole(recard)}>编辑权限</a>,
+        render: (text, recard) => {
+          return (
+            <>
+              <a onClick={() => this.editRole(recard)}>编辑权限</a>
+              <a onClick={() => this.lookRole(recard)}>查看权限</a>
+            </>
+          );
+        },
       },
     ];
   }
@@ -94,6 +103,7 @@ class index extends Component {
     sendUserId: '',
     sendUserName: '',
     drawerVisible: false,
+    roleList: [],
   };
   componentDidMount() {
     const { queryBranchVo, branchVo } = this.props;
@@ -150,6 +160,35 @@ class index extends Component {
       roleVisible: true,
     });
   };
+  lookRole = item => {
+    const { projectId, getAuthAssignForUser, authData } = this.props;
+    this.setState({
+      eyeVisible: true,
+    });
+    getAuthAssignForUser({
+      userId: item.oaCode,
+      projectId: projectId,
+    }).then(res => {
+      if (res.code === 200) {
+        const arr = [];
+        res.data.map(item => {
+          for (const key in authData) {
+            if (item.toString() === key) {
+              arr.push(authData[key]['name']);
+            }
+          }
+        });
+        this.setState({
+          roleList: arr,
+        });
+      }
+    });
+  };
+  hideEyeModal = () => {
+    this.setState({
+      eyeVisible: false,
+    });
+  };
   editRole = item => {
     const { projectId, getAuthAssignForUser } = this.props;
     this.setState({
@@ -187,6 +226,7 @@ class index extends Component {
       userId: '',
       userRoleData: [],
       roleVisible: false,
+      eyeVisible: false,
     });
     getByOrgId({ orgId: bmId });
   };
@@ -242,16 +282,25 @@ class index extends Component {
       BranchLoading,
       forUseLoading,
       OrgIdLoading,
-      userMsg,
+      userInfo,
       submitLoading,
-      authData,
+      authList,
     } = this.props;
-    const { title, roleVisible, searchData, userId, sendUserName, drawerVisible } = this.state;
+    const {
+      title,
+      roleVisible,
+      searchData,
+      userId,
+      sendUserName,
+      drawerVisible,
+      eyeVisible,
+      roleList,
+    } = this.state;
     return (
       <>
         <Row>
           <Card>
-            <Col span={6} style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto' }}>
+            <Col span={6} style={{ height: 'calc(100vh - 300px)', overflowY: 'auto' }}>
               <Spin spinning={BranchLoading}>
                 <Tree
                   className="draggable-tree"
@@ -276,7 +325,7 @@ class index extends Component {
                     </Tooltip>
                   ) : null}
                 </div>
-                <div style={{ marginTop: '18px' }}>
+                <div style={{ marginTop: '18px',height: 'calc(100vh - 400px)' }}>
                   {title === '未选择部门' ? (
                     <Empty description={false} />
                   ) : (
@@ -284,7 +333,7 @@ class index extends Component {
                       <Table
                         rowKey="userId"
                         columns={this.columns}
-                        dataSource={userMsg}
+                        dataSource={userInfo}
                         scroll={{ y: 240 }}
                         pagination={false}
                       />
@@ -311,7 +360,7 @@ class index extends Component {
                     dataSource={searchData}
                     onSearch={debounce(this.onSearch, 1000)}
                     onSelect={this.onSelect}
-                    placeholder="请选择人员姓名"
+                    placeholder="请输入人员姓名"
                     value={sendUserName}
                     onChange={this.autoChange}
                     disabled={!!userId}
@@ -334,7 +383,7 @@ class index extends Component {
                   <Spin />
                 ) : (
                   <RoleTransfer
-                    treeData={authData}
+                    treeData={authList}
                     onTransfer={this.onTransfer}
                     roleType="user"
                   ></RoleTransfer>
@@ -349,6 +398,25 @@ class index extends Component {
               <Button onClick={this.roleHideModal}>取消</Button>
             </Form.Item>
           </Form>
+        </Modal>
+        <Modal
+          title="该人员权限"
+          visible={eyeVisible}
+          onCancel={this.hideEyeModal}
+          maskClosable={false}
+          footer={null}
+        >
+          {forUseLoading ? (
+            <Spin />
+          ) : roleList.length ? (
+            <Descriptions bordered>
+              <Descriptions.Item label="人员权限" span={3}>
+                {roleList.join(',')}
+              </Descriptions.Item>
+            </Descriptions>
+          ) : (
+            <Empty description="该角色暂无权限" image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+          )}
         </Modal>
         <AddressBook
           drawerVisible={drawerVisible}

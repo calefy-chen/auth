@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-11 05:10:37
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 15:30:26
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 14:57:26
  * @Description: file content
  */
 import { get, post } from '@/utils/request';
@@ -23,17 +23,17 @@ export const getAssignedToWho = (itemId: string) => {
   return get('/authsys/authAssign/assignedToWho', { itemId})
 };
 export const queryBranchVo = () => {
-  return get('/api/cmonitor/admin/queryBranchVo')
+  return get('/cmonitor/admin/queryBranchVo')
 };
 export const getOaList = () => {
-  return get('api/cmsoa/uuv/org/list')
+  return get('/cmsoa/uuv/org/list')
 };
 export const getSelfDept = () => {
-  return get('api/cmsoa/uuv/org/selfDept')
+  return get('/cmsoa/uuv/org/selfDept')
 };
 export const getByOrgId = (orgId:string) => {
-  return get('api/cmsoa/uuv/user/byOrgId',{orgId})
+  return get('/cmsoa/uuv/user/byOrgId',{orgId})
 };
 export const searchUser = (keyword:string) => {
-  return get('api/cmsoa/uuv/addressBook/searchUser',{keyword})
+  return get('/cmsoa/uuv/addressBook/searchUser',{keyword})
 };

@@ -1,14 +1,14 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-14 18:12:18
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:04:36
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:54:03
  * @Description: file content
  */
 import React, { Component } from 'react';
 import { Drawer, Tree, Row, Card, Col, Spin, List, Empty } from 'antd';
 import { connect } from 'dva';
-import './index.css'
+import './index.css';
 const { TreeNode } = Tree;
 
 @connect(
@@ -16,7 +16,7 @@ const { TreeNode } = Tree;
     addressList: authAssign.addressList,
     loading: loading.effects['authAssign/getAddressList'],
     OrgIdLoading: loading.effects['authAssign/getByOrgId'],
-    userMsg: authAssign.addUserMsg,
+    userMsg: authAssign.addrUserInfo,
   }),
   dispatch => ({
     searchUser: payload => dispatch({ type: 'authAssign/searchUser', payload }),
@@ -49,7 +49,7 @@ class addressBook extends Component {
   };
   onTreeSelect = (key, e) => {
     const { getByOrgId } = this.props;
-    getByOrgId({ orgId: key,isAddress:true });
+    getByOrgId({ orgId: key, isAddress: true });
     this.setState({
       isSelect: true,
     });
@@ -72,23 +72,25 @@ class addressBook extends Component {
     return (
       <Drawer
         title="人员选择"
-        width={720}
+        width="480"
         onClose={this.onClose}
         visible={drawerVisible}
         maskClosable={false}
       >
         <Row>
-          <Col span={18} style={{ maxHeight: 'calc(100vh - 110px)', overflow: 'hidden' }}>
-            <Card style={{ height: 'calc(100vh - 110px)',overflowY: 'auto'}}>
-              <Spin spinning={loading}>
-                <Tree className="draggable-tree" showLine blockNode onSelect={this.onTreeSelect}>
-                  {this.renderTreeNodes(addressList)}
-                </Tree>
-              </Spin>
+          <Col span={12} style={{ maxHeight: 'calc(100vh - 110px)', overflow: 'hidden' }}>
+            <Card style={{ height: 'calc(100vh - 110px)', overflowY: 'auto' }}>
+              {drawerVisible ? (
+                <Spin spinning={loading}>
+                  <Tree className="draggable-tree" showLine blockNode onSelect={this.onTreeSelect}>
+                    {this.renderTreeNodes(addressList)}
+                  </Tree>
+                </Spin>
+              ) : null}
             </Card>
           </Col>
-          <Col span={6} style={{ height: 'calc(100vh - 110px)', overflowY: 'auto' }}>
-            {isSelect? (
+          <Col span={12} style={{ height: 'calc(100vh - 110px)', overflowY: 'auto' }}>
+            {isSelect ? (
               <Spin spinning={OrgIdLoading}>
                 <List
                   bordered
