@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-07 21:08:40
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-10 13:44:00
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:31:40
  * @Description: file content
  */
 import React, { Component } from 'react'
@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import { Form, Button, Input, message } from 'antd';
 
 @connect(({ loading,project,auth }) => ({
-  Loading: loading.effects['auth/submitAuth'],
+  Loading: loading.effects['auth/addAuth'] || loading.effects['auth/editAuth'],
   projectDetail:project.projectDetail,
   type:auth.tabKey
 }),

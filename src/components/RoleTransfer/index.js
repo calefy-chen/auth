@@ -16,7 +16,7 @@ const generateTree = (treeNodes = [], checkedKeys = []) => {
   return treeNodes.map(({ children, ...props }) => (
     <TreeNode
       {...props}
-      disabled={checkedKeys.includes(props.id)}
+      disabled={checkedKeys.includes(props.id.toString())}
       key={props.id}
       title={props.name}
     >

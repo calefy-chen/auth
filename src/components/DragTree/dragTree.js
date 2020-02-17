@@ -1,13 +1,13 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-05 17:41:49
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-12 19:53:42
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 17:10:36
  * @Description: file content
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Tree, Icon, Empty, Card, Tooltip } from 'antd';
+import { Tree, Icon, Empty, Card, Tooltip, message } from 'antd';
 import PropTypes from 'prop-types';
 import './index.css';
 
@@ -20,6 +20,7 @@ const { TreeNode } = Tree;
   }),
   dispatch => ({
     // setAuthList:
+    dragItem: payload => dispatch({ type: 'auth/dragItem', payload }),
     setAuthList: payload => dispatch({ type: 'auth/setAuthList', payload }),
   }),
 )
@@ -28,11 +29,10 @@ class dragTree extends Component {
     key: PropTypes.string,
     onOption: PropTypes.func,
     iconData: PropTypes.object,
-    onDrop: PropTypes.func,
   };
 
   onDrop = info => {
-    const { onDrop, authKey, authList, setAuthList } = this.props;
+    const { authKey, authList, setAuthList } = this.props;
     const dropKey = info.node.props.eventKey;
     const dragKey = info.dragNode.props.eventKey;
     const dropPos = info.node.props.pos.split('-');
@@ -95,9 +95,26 @@ class dragTree extends Component {
     }
 
     allData[authKey] = data;
-    // 修改redux中authList
-    setAuthList(allData);
-    onDrop(info);
+    // 请求服务端
+    const { dragItem } = this.props;
+    const id = info.dragNode.props.dataRef.id;
+    let parentId;
+    let level = info.node.props.pos.split('-').pop() - 0 + 1;
+    if (!info.dropToGap) {
+      parentId = info.node.props.dataRef.id;
+      level = info.node.props.dataRef.children.length
+    } else {
+      parentId = info.node.props.dataRef.parentId;
+    }
+    dragItem({ id, parentId, level }).then(res => {
+      // 修改redux中authList
+      if(res.code === 200){
+        setAuthList(allData);
+        message.success('操作成功')
+      }else{
+        message.error(res.message)
+      }
+    })
   };
   //递归渲染treeNode
   renderTreeNodes = data =>
@@ -123,9 +140,9 @@ class dragTree extends Component {
         <div style={{ float: 'right' }} className="iconGroup">
           {Object.keys(iconData).map((item, index) => {
             return (
-              <Tooltip key={index} placement="topLeft" title={iconData[item]}>
+              <Tooltip key={index} placement="top" title={iconData[item]}>
                 <span
-                  style={{ display: 'inline-block', paddingLeft: '10px' }}
+                  style={{ display: 'inline-block', marginRight: '12px' }}
                   onClick={() => {
                     this.onOption(msg, msg.parentId, item);
                   }}
@@ -151,12 +168,12 @@ class dragTree extends Component {
     const { authList, authKey } = this.props;
     return authList[authKey].length ? (
       <Card style={{ width: '60%', margin: '15px auto 0 auto' }}>
-        <Tree className="draggable-tree" draggable blockNode defaultExpandAll onDrop={this.onDrop}>
+        <Tree className="draggable-tree" draggable showLine blockNode defaultExpandAll onDrop={this.onDrop}>
           {this.renderTreeNodes(authList[authKey])}
         </Tree>
       </Card>
     ) : (
-      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据"/>
     );
   }
 }

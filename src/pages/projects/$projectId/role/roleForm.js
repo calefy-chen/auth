@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-10 13:42:19
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 14:37:56
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:51:56
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -12,7 +12,7 @@ const { TreeNode } = TreeSelect;
 @connect(
   ({ loading, project, auth }) => ({
     roleLoading: loading.effects['authAssign/getAuthAssignForRole'],
-    submitLoading: loading.effects['auth/submitAuth'],
+    submitLoading: loading.effects['auth/addAuth'] || loading.effects['auth/editAuth'],
     authData: auth.authList,
     projectDetail: project.projectDetail,
     type: auth.tabKey,

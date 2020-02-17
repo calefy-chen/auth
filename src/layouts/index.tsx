@@ -5,6 +5,7 @@ import { RouteProps } from 'react-router';
 import isEmpty from 'lodash/isEmpty';
 import styles from './index.css';
 import { Spin } from 'antd';
+import Cookies from 'js-cookie'
 import Header from '@/components/Header';
 
 interface BasicLayoutProps extends RouteProps {
@@ -24,14 +25,12 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
 
   // 需要登录时，获取当前登录用户，获取失败时跳转
   useEffect(() => {
-    if (!noNeedLogin && isEmpty(user)) {
-      fetchCurrent().then(u => {
-        if (!u) {
-          router.push('/user/login');
-        }
-      });
+    if (!noNeedLogin && !Cookies.get('auth.token')) {
+        router.push('/user/login');
+    }else{
+      fetchCurrent()
     }
-  }, [noNeedLogin, user]);
+  }, [noNeedLogin, Cookies.get('auth.token')]);
 
   // 不需要登录的页面，单独布局
   if (noNeedLogin) {

@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 18:07:43
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 17:04:26
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -19,9 +19,9 @@ const { confirm } = Modal;
     toWhoData: authAssign.toWhoData,
     projectId: project.projectDetail.id,
     authList: auth.authList,
+    authData:auth.authData
   }),
   dispatch => ({
-    dragItem: payload => dispatch({ type: 'auth/dragItem', payload }),
     deleteAuth: payload => dispatch({ type: 'auth/deleteAuth', payload }),
     fetchAuthList: payload => dispatch({ type: 'auth/getAuthList', payload }),
     getAssignedToWho: payload => dispatch({ type: 'authAssign/getAssignedToWho', payload }),
@@ -29,19 +29,6 @@ const { confirm } = Modal;
 )
 class index extends Component {
   state = { visible: false, perDetail: {}, parentId: '', eyeVisible: false };
-  onDrop = info => {
-    const { dragItem } = this.props;
-    const id = info.dragNode.props.dataRef.id;
-    let parentId;
-    let level = info.node.props.pos.split('-').pop() - 0 + 1;
-    if (!info.dropToGap) {
-      parentId = info.node.props.dataRef.id;
-      level = info.node.props.dataRef.children.length
-    } else {
-      parentId = info.node.props.dataRef.parentId;
-    }
-    dragItem({ id, parentId, level });
-  };
   onOption = (item, parentId, type) => {
     switch (type) {
       case 'edit':
@@ -117,8 +104,18 @@ class index extends Component {
   };
   render() {
     const { visible, perDetail, parentId, eyeVisible } = this.state;
-    const { authList, toWhoData, loading } = this.props;
-    const iconData = { edit: '编辑', delete: '删除', 'plus-square': '新增', eye: '查看权限分配' };
+    const { toWhoData, loading,authData } = this.props;
+    const iconData = { 'plus-square': '添加',edit: '编辑',eye: '查看权限分配', delete: '删除' };
+    let rolesArr = []
+    if(toWhoData['roles']){
+      toWhoData['roles'].map(item => {
+        for (const key in authData) {
+          if(item === key){
+            rolesArr.push(authData[key]['name'])
+          }
+        }
+      })
+    }
     return (
       <>
         <Button type="primary" onClick={() => this.addPer('')}>
@@ -156,7 +153,7 @@ class index extends Component {
           ) : get(toWhoData, 'roles', []).length || get(toWhoData, 'users', []).length ? (
             <Descriptions  bordered size="small">
               {get(toWhoData, 'roles', []).length && toWhoData['roles'] ? (
-                <Descriptions.Item label="角色" span={3}>{toWhoData['roles']}</Descriptions.Item>
+                <Descriptions.Item label="角色" span={3}>{rolesArr.join(',')}</Descriptions.Item>
               ) : null}
               {get(toWhoData, 'users', []).length ? (
                 <Descriptions.Item label="人员" span={3}>{toWhoData['users'].map(item => item.userName).join(',')}</Descriptions.Item>

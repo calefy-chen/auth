@@ -1,8 +1,8 @@
 /*
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:46:50
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:53:05
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -17,8 +17,8 @@ const authAssign: Model = {
     forUserData:[],
     toWhoData: {},
     branchVo: [],
-    userMsg: [],
-    addUserMsg:[],
+    userInfo: [],
+    addUserInfo:[],
     addressList:[]
   },
 
@@ -124,13 +124,13 @@ const authAssign: Model = {
     setByOrgId(state, action) {
       return {
         ...state,
-        userMsg: get(action, 'payload'),
+        userInfo: get(action, 'payload'),
       };
     },
     setAddByOrgId(state, action) {
       return {
         ...state,
-        addUserMsg: get(action, 'payload'),
+        addrUserInfo: get(action, 'payload'),
       };
     },
     setAddressList(state,action){

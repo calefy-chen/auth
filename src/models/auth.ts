@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-06 14:55:13
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:50:45
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-17 15:46:10
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -13,6 +13,7 @@ const Auth: Model = {
   namespace: 'auth',
   state: {
     authList: {},
+    authData:[],
     tabKey:'role'
   },
 
@@ -21,6 +22,7 @@ const Auth: Model = {
       const res = yield call(api.getAuthList, payload);
       if (res && res.data) {
         yield put({ type: 'setAuthList', payload: res.data.tree });
+        yield put({ type: 'setAuthData', payload: res.data.data });
       }
       return res;
     },
@@ -59,6 +61,12 @@ const Auth: Model = {
         authList: get(action, 'payload'),
       };
     },
+    setAuthData(state,action){
+      return {
+        ...state,
+        authData: get(action, 'payload'),
+      };
+    }
   },
 };
 

@@ -13,7 +13,6 @@ export default function Header(user: any) {
         <Link to="/">首页</Link>
         </span>
         <span style={{float:'right'}}>
-          <Icon type="github" style={{fontSize: 18, marginRight: 4}} />
           <span className={styles.name}>{userInfo.name}</span>
         </span>
       </div>
