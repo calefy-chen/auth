@@ -1,14 +1,15 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-05 15:19:25
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-17 09:27:13
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-18 15:00:20
  * @Description: file content
  */
 /**
  * 项目详情页
  */
 import React, { Component } from 'react';
+import router from 'umi/router';
 import { Tabs, Spin, Breadcrumb } from 'antd';
 import { connect } from 'dva';
 import Role from './role';
@@ -38,8 +39,14 @@ class index extends Component {
       fetchAuthList,
       match: { params },
     } = this.props;
-    fetchDetail(params.projectId);
-    fetchAuthList(params.projectId);
+    fetchDetail(params.projectId).then(res=>{
+      if(res.data){
+        fetchAuthList(res.data.id)
+      }else{
+        router.push('/error')
+      }
+    });
+    ;
   }
   tabChange = key => {
     const { setTypeKey } = this.props;

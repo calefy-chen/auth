@@ -51,7 +51,7 @@ const Login = ({
   // 渲染表单
   return (
     <Form onSubmit={handleSubmit} className={styles.loginForm}>
-      <h3 style={{textAlign:'center'}}>权限管理系统</h3>
+      <h1 style={{textAlign:'center',marginTop:'-40px',transform:'translateY(-60px)',position:'relative'}}>权限管理系统</h1>
       <Form.Item label="账号">
         {getFieldDecorator('account', {
           rules: [{ required: true, message: '请输入账号' }],

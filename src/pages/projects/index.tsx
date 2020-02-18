@@ -28,7 +28,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
     if (isEmpty(lists)) {
       fetchList();
     }
-  }, [lists]);
+  }, []);
 
   const showModal = useCallback((item = null) => {
     setVisible(true);
@@ -64,14 +64,13 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   }, []);
 
   // 加载当前项目期间，loading
-  if (isEmpty(lists) || loading) {
+  if (loading) {
     return (
       <div style={{ textAlign: 'center', padding: 120 }}>
         <Spin size="large" />
       </div>
     );
   }
-
   return (
     <div style={{ background: '#ECECEC', padding: '30px' }}>
       <Row gutter={[16, 16]}>
@@ -104,7 +103,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
       </Row>
 
       <Modal
-        title="创建/编辑项目"
+        title={projectDetail?.id?  '编辑项目':'创建项目'}
         visible={visible}
         onCancel={hideModal}
         maskClosable={false}
