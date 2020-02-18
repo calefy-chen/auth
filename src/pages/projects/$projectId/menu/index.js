@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 15:32:35
+ * @LastEditTime: 2020-02-18 15:53:07
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -59,6 +59,8 @@ class index extends Component {
           if (res.code === 200) {
             message.success('删除成功');
             fetchAuthList(projectId);
+          }else{
+            message.error(res.message);
           }
         });
       },
@@ -99,7 +101,7 @@ class index extends Component {
           onDrop={this.onDrop}
         />
         <Modal
-          title="创建/编辑菜单"
+          title={menuDetail.id? "编辑菜单":"新增菜单"}
           visible={visible}
           onCancel={this.hideModal}
           maskClosable={false}

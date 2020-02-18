@@ -54,6 +54,8 @@ const ProjectForm = ({
         if (res.code === 200) {
           message.success('处理成功');
           onEditEnd()
+        }else{
+          message.error(res.message);
         }
       });
     });

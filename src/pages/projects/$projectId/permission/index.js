@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 17:04:26
+ * @LastEditTime: 2020-02-18 15:53:32
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -65,6 +65,8 @@ class index extends Component {
           if (res.code === 200) {
             message.success('删除成功');
             fetchAuthList(projectId);
+          }else{
+            message.error(res.message);
           }
         });
       },
@@ -128,7 +130,7 @@ class index extends Component {
           onDrop={this.onDrop}
         />
         <Modal
-          title="创建/编辑权限"
+          title={perDetail.id? "编辑权限":"新增权限"}
           visible={visible}
           onCancel={this.hideModal}
           maskClosable={false}
