@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 15:19:25
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-18 15:00:20
+ * @LastEditTime: 2020-02-18 15:31:29
  * @Description: file content
  */
 /**
@@ -27,6 +27,7 @@ const { TabPane } = Tabs;
     loading: loading.effects['auth/getAuthList'],
   }),
   dispatch => ({
+    clearData:()=> dispatch({type:'auth/clearData'}),
     fetchDetail: payload => dispatch({ type: 'project/getProjectDetail', payload }),
     fetchAuthList: payload => dispatch({ type: 'auth/getAuthList', payload }),
     setTypeKey: payload => dispatch({ type: 'auth/setTypeKey', payload }),
@@ -47,6 +48,10 @@ class index extends Component {
       }
     });
     ;
+  }
+  componentWillUnmount(){
+    const {clearData} = this.props
+    clearData()
   }
   tabChange = key => {
     const { setTypeKey } = this.props;

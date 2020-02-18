@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 14:55:13
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 15:46:10
+ * @LastEditTime: 2020-02-18 15:30:34
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -66,6 +66,13 @@ const Auth: Model = {
         ...state,
         authData: get(action, 'payload'),
       };
+    },
+    clearData(state){
+      return{
+        ...state,
+        authList:{},
+        authData:[]
+      }
     }
   },
 };
