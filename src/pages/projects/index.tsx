@@ -57,6 +57,8 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
           if (res.code === 200) {
             message.success('删除成功');
             fetchList();
+          }else{
+            message.error(res.message);
           }
         });
       },
