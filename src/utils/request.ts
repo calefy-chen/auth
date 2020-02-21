@@ -14,7 +14,7 @@ function axiosRequest(config: AxiosRequestConfig) {
         if(location.hash !== '#/user/login'){
           Cookies.set('redirct',location.hash)
         }
-        router.push('/user/login')
+        router.replace('/user/login')
       }
       return res.data
     }) // 从Response摘取实际返回值

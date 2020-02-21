@@ -25,16 +25,12 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
 
   // 需要登录时，获取当前登录用户，获取失败时跳转
   useEffect(() => {
-    if (!noNeedLogin && !Cookies.get('auth.token')) {
-        router.push('/user/login');
-    }else{
       fetchCurrent().then((res) => {
         if(res.code !== 200){
           Cookies.remove('auth.token')
-          router.push('/user/login');
+          router.replace('/user/login');
         }
       })
-    }
   }, [noNeedLogin, Cookies.get('auth.token')]);
 
   // 不需要登录的页面，单独布局
