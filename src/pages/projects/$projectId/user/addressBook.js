@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-14 18:12:18
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 15:54:03
+ * @LastEditTime: 2020-02-21 23:10:50
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -49,7 +49,7 @@ class addressBook extends Component {
   };
   onTreeSelect = (key, e) => {
     const { getByOrgId } = this.props;
-    getByOrgId({ orgId: key, isAddress: true });
+    getByOrgId({ orgId: key});
     this.setState({
       isSelect: true,
     });

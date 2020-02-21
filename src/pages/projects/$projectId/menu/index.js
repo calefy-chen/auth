@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-19 16:40:02
+ * @LastEditTime: 2020-02-21 18:45:28
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -80,7 +80,7 @@ class index extends Component {
       this.setState({
         menuDetail: {}
       });
-    },300)
+    },200)
   };
   onEditEnd = () => {
     const { fetchAuthList, projectId } = this.props;

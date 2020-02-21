@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-13 10:02:58
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-21 15:00:51
+ * @LastEditTime: 2020-02-21 23:11:47
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -54,8 +54,10 @@ function debounce(func, wait) {
     branchVo: authAssign.branchVo,
     BranchLoading: loading.effects['authAssign/queryBranchVo'],
     OrgIdLoading: loading.effects['authAssign/getByOrgId'],
+    forOrgLoading: loading.effects['authAssign/forOrgStaff'],
     submitLoading: loading.effects['authAssign/authAssignToUser'],
     forUseLoading: loading.effects['authAssign/getAuthAssignForUser'],
+    forRoleLoading:loading.effects['authAssign/getAuthAssignForRole'],
     userInfo: authAssign.userInfo,
     authList: auth.authList,
   }),
@@ -63,7 +65,9 @@ function debounce(func, wait) {
     searchUser: payload => dispatch({ type: 'authAssign/searchUser', payload }),
     queryBranchVo: () => dispatch({ type: 'authAssign/queryBranchVo' }),
     getByOrgId: payload => dispatch({ type: 'authAssign/getByOrgId', payload }),
+    forOrgStaff: payload => dispatch({ type: 'authAssign/forOrgStaff', payload }),
     authAssignToUser: payload => dispatch({ type: 'authAssign/authAssignToUser', payload }),
+    getAuthAssignForRole: payload => dispatch({ type: 'authAssign/getAuthAssignForRole', payload }),
     getAuthAssignForUser: payload => dispatch({ type: 'authAssign/getAuthAssignForUser', payload }),
     setAuthAssignForUser: payload => dispatch({ type: 'authAssign/setAuthAssignForUser', payload }),
     setAddByOrgId: payload => dispatch({ type: 'authAssign/setAddByOrgId', payload }),
@@ -75,26 +79,39 @@ class index extends Component {
     this.columns = [
       {
         title: '人员Id',
-        dataIndex: 'oaCode',
+        dataIndex: 'userId',
       },
       {
         title: '人员姓名',
-        dataIndex: 'name',
+        dataIndex: 'userName',
       },
       {
-        title: '所属部门',
-        dataIndex: 'orgName',
+        title: (
+          <>
+            角色
+            <Tooltip placement="top" title="点击角色名称，可查看其包含的角色、权限及菜单">
+              <a>
+                <Icon type="question-circle" />
+              </a>
+            </Tooltip>
+          </>
+        ),
+        width:300,
+        dataIndex: 'items',
+        render: text => {
+          return text.map((item,index) => {
+            return (
+              <Tag style={{cursor:'pointer',marginBottom:'5px'}} key={index} onClick={() => this.lookRole(item)}>
+                {props.authData[item].name}
+              </Tag>
+            );
+          });
+        },
       },
       {
         title: '操作',
-        dataIndex: 'userId',
         render: (text, recard) => {
-          return (
-            <>
-              <a onClick={() => this.editRole(recard)}>分配角色</a>
-              <a onClick={() => this.lookRole(recard)}>查看权限</a>
-            </>
-          );
+          return <a onClick={() => this.editRole(recard)}>角色分配</a>;
         },
       },
     ];
@@ -158,8 +175,8 @@ class index extends Component {
       return <TreeNode key={item.branchNo} title={item.branchName} dataRef={item} />;
     });
   onTreeSelect = (key, e) => {
-    const { getByOrgId } = this.props;
-    getByOrgId({ orgId: key });
+    const { forOrgStaff, projectId } = this.props;
+    forOrgStaff({ orgId: key, projectId }).then(res => {});
     this.setState({
       title: e.node.props.title,
       bmId: e.node.props.dataRef.branchNo,
@@ -172,25 +189,21 @@ class index extends Component {
     });
   };
   lookRole = item => {
-    const { projectId, getAuthAssignForUser, authData } = this.props;
+    const { getAuthAssignForRole, authData } = this.props;
     this.setState({
       eyeVisible: true,
     });
-    getAuthAssignForUser({
-      userId: item.oaCode,
-      projectId: projectId,
-    }).then(res => {
+    getAuthAssignForRole(item).then(res => {
       if (res.code === 200) {
         const obj = {
-          role: [],
-          permission: [],
-          route: [],
+          role:[],
+          route:[],
+          permission:[]
         };
         res.data.forEach(item => {
           for (const key in authData) {
             if (item.toString() === key) {
-              const objKey = authData[key]['type'];
-              obj[objKey].push(authData[key]['name']);
+              obj[authData[key]['type']].push(authData[key]['name']);
             }
           }
         });
@@ -219,12 +232,12 @@ class index extends Component {
     this.setState({
       roleVisible: true,
       showTransfer: true,
-      userId: item.oaCode,
-      sendUserName: item.name,
-      sendUserId: item.oaCode,
+      userId: item.userId,
+      sendUserName: item.userName,
+      sendUserId: item.userId,
     });
     getAuthAssignForUser({
-      userId: item.oaCode,
+      userId: item.userId,
       projectId: projectId,
     }).then(res => {
       if (res.code === 200) {
@@ -250,13 +263,13 @@ class index extends Component {
         userRoleData: [],
         showTransfer: false,
       });
-    }, 300);
+    }, 200);
   };
   onEditEnd = () => {
     const { bmId } = this.state;
-    const { getByOrgId } = this.props;
+    const { forOrgStaff, projectId } = this.props;
     this.roleHideModal();
-    getByOrgId({ orgId: bmId });
+    forOrgStaff({ orgId: bmId, projectId });
   };
   handleSubmit = () => {
     const { authAssignToUser, projectId } = this.props;
@@ -313,6 +326,8 @@ class index extends Component {
       userInfo,
       submitLoading,
       authList,
+      forOrgLoading,
+      forRoleLoading
     } = this.props;
     const {
       title,
@@ -359,9 +374,8 @@ class index extends Component {
                   {title === '未选择部门' ? (
                     <Empty description={false} />
                   ) : (
-                    <Spin spinning={OrgIdLoading}>
+                    <Spin spinning={forOrgLoading}>
                       <Table
-                        rowKey="userId"
                         columns={this.columns}
                         dataSource={userInfo}
                         scroll={{ y: 'calc(100vh - 450px)' }}
@@ -410,12 +424,12 @@ class index extends Component {
             </Form.Item>
             {showTransfer ? (
               <Form.Item label="角色分配：" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
-                <Spin spinning={forUseLoading && !!userId}>
+                <Spin spinning={!!forUseLoading && !!userId}>
                   <RoleTransfer
                     treeData={authList}
                     onTransfer={this.onTransfer}
-                    showKey={{role:'角色'}}
-                    topTitle={['全部角色','已分配角色']}
+                    showKey={{ role: '角色' }}
+                    topTitle={['全部角色', '已分配角色']}
                     roleType="user"
                   ></RoleTransfer>
                 </Spin>
@@ -438,23 +452,25 @@ class index extends Component {
           footer={null}
         >
           {
-            <Spin spinning={forUseLoading}>
-              <Descriptions bordered size="small" style={{ minHeight: '80px' }}>
-                {Object.keys(roleList).map((item,index) => {
-                  return (
-                    <Descriptions.Item label={obj[item]} key={index} span={3}>
-                      {roleList[item].length
-                        ? roleList[item].map((item,index) => (
-                            <Tag color="geekblue" style={{ marginBottom: '5px' }}>
+            <Spin spinning={forRoleLoading}>
+            <Descriptions bordered size="small" style={{ minHeight: '80px' }}>
+              {Object.keys(roleList).map((item,index) => {
+                return (
+                  <Descriptions.Item label={obj[item]} key={index} span={3}>
+                    {roleList[item].length
+                      ? roleList[item].map((item, index) => {
+                          return (
+                            <Tag color="geekblue" key={index} style={{ marginBottom: '5px' }}>
                               {item}
                             </Tag>
-                          ))
-                        : '暂无' + obj[item] + '分配'}
-                    </Descriptions.Item>
-                  );
-                })}
-                )
-              </Descriptions>
+                          );
+                        })
+                      : '暂无' + obj[item] + '分配'}
+                  </Descriptions.Item>
+                );
+              })}
+              )
+            </Descriptions>
             </Spin>
           }
         </Modal>

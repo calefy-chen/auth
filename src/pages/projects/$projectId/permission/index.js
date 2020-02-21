@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-21 14:53:19
+ * @LastEditTime: 2020-02-21 23:13:52
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -92,7 +92,7 @@ class index extends Component {
       this.setState({
         perDetail: {},
       });
-    }, 300);
+    }, 200);
   };
   hideEyeModal = () => {
     this.setState({
@@ -161,8 +161,8 @@ class index extends Component {
               {
                 <Descriptions.Item label="角色" span={3}>
                   {rolesArr.length
-                    ? rolesArr.map(item => (
-                        <Tag color="geekblue" style={{ marginBottom: '5px' }}>
+                    ? rolesArr.map((item,index) => (
+                        <Tag color="geekblue" key={index} style={{ marginBottom: '5px' }}>
                           {item}
                         </Tag>
                       ))
@@ -172,8 +172,8 @@ class index extends Component {
               {
                 <Descriptions.Item label="人员" span={3}>
                   {userArr.length
-                    ? userArr.map(item => (
-                        <Tag color="geekblue" style={{ marginBottom: '5px' }}>
+                    ? userArr.map((item,index)=> (
+                        <Tag color="geekblue" key={index} style={{ marginBottom: '5px' }}>
                           {item}
                         </Tag>
                       ))
