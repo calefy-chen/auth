@@ -11,9 +11,6 @@ function axiosRequest(config: AxiosRequestConfig) {
   return axios(config)
     .then((res: AxiosResponse) => {
       if(res.data.code === 401){
-        if(location.hash !== '#/user/login'){
-          Cookies.set('redirct',location.hash)
-        }
         router.replace('/user/login')
       }
       return res.data
