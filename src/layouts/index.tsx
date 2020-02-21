@@ -28,7 +28,12 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
     if (!noNeedLogin && !Cookies.get('auth.token')) {
         router.push('/user/login');
     }else{
-      fetchCurrent()
+      fetchCurrent().then((res) => {
+        if(res.code !== 200){
+          Cookies.remove('auth.token')
+          router.push('/user/login');
+        }
+      })
     }
   }, [noNeedLogin, Cookies.get('auth.token')]);
 

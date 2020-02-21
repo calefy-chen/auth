@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-18 15:53:49
+ * @LastEditTime: 2020-02-21 14:52:44
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -22,6 +22,7 @@ const { confirm } = Modal;
     deleteAuth: payload => dispatch({ type: 'auth/deleteAuth', payload }),
     fetchAuthList: payload => dispatch({ type: 'auth/getAuthList', payload }),
     setAuthList: payload => dispatch({ type: 'auth/setAuthList', payload }),
+    setAuthAssignForRole: payload => dispatch({ type: 'authAssign/setAuthAssignForRole', payload }),
   }),
 )
 class index extends Component {
@@ -62,7 +63,7 @@ class index extends Component {
           if (res.code === 200) {
             message.success('删除成功');
             fetchAuthList(projectId);
-          }else{
+          } else {
             message.error(res.message);
           }
         });
@@ -84,10 +85,16 @@ class index extends Component {
   hideModal = () => {
     this.setState({
       visible: false,
-      roleDetail: {},
     });
+    setTimeout(() => {
+      this.setState({
+        roleDetail: {},
+      });
+    }, 300);
   };
   roleHideModal = () => {
+    const { setAuthAssignForRole } = this.props;
+    setAuthAssignForRole([]);
     this.setState({
       roleVisible: false,
       roleDetail: {},
@@ -95,22 +102,18 @@ class index extends Component {
   };
   onEditEnd = () => {
     const { fetchAuthList, projectId } = this.props;
-    this.setState({
-      visible: false,
-      roleDetail: {},
-    });
+    this.hideModal();
     fetchAuthList(projectId);
   };
   onEditToRole = () => {
     this.setState({
       roleVisible: false,
-      roleDetail: {}
+      roleDetail: {},
     });
   };
   render() {
     const { visible, roleDetail, parentId, roleVisible } = this.state;
-    const { authList } = this.props;
-    const iconData = { 'plus-square': '添加' ,edit: '编辑', apartment: '权限分配', delete: '删除'};
+    const iconData = { 'plus-square': '添加', edit: '编辑', apartment: '权限分配', delete: '删除' };
     return (
       <>
         <Button type="primary" onClick={() => this.addPer('')}>
@@ -123,7 +126,7 @@ class index extends Component {
           onDrop={this.onDrop}
         />
         <Modal
-          title={roleDetail.id? "编辑角色":"新增角色"}
+          title={roleDetail.id ? '编辑角色' : '新增角色'}
           visible={visible}
           onCancel={this.hideModal}
           maskClosable={false}
@@ -140,13 +143,17 @@ class index extends Component {
         <Modal
           title="权限分配"
           width={720}
+          style={{ top: 20 }}
           visible={roleVisible}
           onCancel={this.roleHideModal}
           maskClosable={false}
           footer={null}
         >
-          {/* {roleVisible ? <ToRoleForm roleId={roleDetail.id} cancel={this.roleHideModal} onEditEnd={this.onEditToRole}/> : null} */}
-          <ToRoleForm roleId={roleDetail.id} cancel={this.roleHideModal} onEditEnd={this.onEditToRole}/>
+          <ToRoleForm
+            roleId={roleDetail.id}
+            cancel={this.roleHideModal}
+            onEditEnd={this.onEditToRole}
+          />
         </Modal>
       </>
     );

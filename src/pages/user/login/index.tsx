@@ -40,11 +40,9 @@ const Login = ({
       login(values).then(res => {
         if (res.code === 200) {
           Cookies.set('auth.token',res.data.token)
-          fetchCurrent()
+          router.push('/')
         }
-      }).then(u => {
-        router.push('/');
-      });
+      })
     });
   }, []);
 

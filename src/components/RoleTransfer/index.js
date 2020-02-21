@@ -1,10 +1,11 @@
 import React from 'react';
-import { Transfer, Tree } from 'antd';
+import { Transfer, Tree,ConfigProvider,Empty } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
+import './index.css'
+import zhCN from 'antd/es/locale/zh_CN';
 const { TreeNode } = Tree;
 
-const obj = {role:'角色',permission: '权限', route: '菜单' };
 
 // Customize Table Transfer
 const isChecked = (selectedKeys, eventKey) => {
@@ -12,21 +13,21 @@ const isChecked = (selectedKeys, eventKey) => {
 };
 
 // 递归渲染treeNode
-const generateTree = (treeNodes = [], checkedKeys = []) => {
+const generateTree = (treeNodes = [], checkedKeys = [], disabledId = '') => {
   return treeNodes.map(({ children, ...props }) => (
     <TreeNode
       {...props}
-      disabled={checkedKeys.includes(props.id.toString())}
+      disabled={checkedKeys.includes(props.id.toString()) || props.id.toString() === disabledId}
       key={props.id}
       title={props.name}
     >
-      {generateTree(children, checkedKeys)}
+      {generateTree(children, checkedKeys, disabledId)}
     </TreeNode>
   ));
 };
 
 // 渲染treeTransfer组件
-const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
+const TreeTransfer = ({ dataSource, targetKeys, disabledId,showKey,topTitle, ...restProps }) => {
   const transferDataSource = [];
   // 生成右边框里的总数据函数
   function flatten(list = []) {
@@ -35,12 +36,13 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
       flatten(item.children);
     });
   }
-  Object.keys(dataSource[0]).map(item => {
+  Object.keys(dataSource[0]).forEach(item => {
     flatten(dataSource[0][item]);
   });
   return (
     <Transfer
       {...restProps}
+      titles={topTitle}
       targetKeys={targetKeys}
       dataSource={transferDataSource}
       render={item => item.title}
@@ -51,16 +53,16 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
         if (direction === 'left') {
           const checkedKeys = [...selectedKeys, ...targetKeys];
           const authList = {};
-          Object.keys(obj).map(item => {
+          Object.keys(showKey).forEach(item => {
             authList[item] = dataSource[0][item];
           });
           return (
             <div>
-              {Object.keys(authList).map((item,index) => {
+              {Object.keys(authList).map((item, index) => {
                 return (
                   <div key={index}>
-                    <h3>{obj[item]}</h3>
-                    <Tree
+                    <h3>{showKey[item]}</h3>
+                    {authList[item].length? <Tree
                       blockNode
                       checkable
                       checkStrictly
@@ -87,8 +89,9 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
                         onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
                       }}
                     >
-                      {generateTree(authList[item], targetKeys)}
-                    </Tree>
+                      {generateTree(authList[item], targetKeys, disabledId)}
+                    </Tree>:<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无'+showKey[item]} />}
+
                   </div>
                 );
               })}
@@ -106,42 +109,55 @@ const TreeTransfer = ({ dataSource, targetKeys, ...restProps }) => {
     forRoleData: authAssign.forRoleData,
     forUserData: authAssign.forUserData,
   }),
-  dispatch => ({
-  }),
+  dispatch => ({}),
 )
 class Index extends React.Component {
-  static propTypes={
-    treeData:PropTypes.object.isRequired,
-    onTransfer:PropTypes.func,
-    roleType:PropTypes.string
-  }
+  static propTypes = {
+    treeData: PropTypes.object.isRequired,
+    onTransfer: PropTypes.func,
+    roleType: PropTypes.string,
+    showKey:PropTypes.object,
+    topTitle:PropTypes.array
+  };
   static defaultProps = {
-    roleType:'role'
-  }
+    roleType: 'role',
+    showKey:{ role: '角色', permission: '权限', route: '菜单' },
+    topTitle:['全部权限','已分配权限']
+  };
   state = {
     targetKeys: [],
   };
-  componentDidMount() {
-    const {forRoleData,roleType,forUserData} = this.props
-    if(roleType==='role'){
-      this.setState({targetKeys:forRoleData})
-    }else{
-      this.setState({targetKeys:forUserData})
+  componentDidUpdate(pre) {
+    const { forRoleData, roleType,forUserData } = this.props;
+    if(pre.forRoleData !== forRoleData ||pre.forUserData !== forUserData ){
+      if (roleType === 'role') {
+        this.setState({ targetKeys: forRoleData });
+      }else{
+        this.setState({ targetKeys: forUserData });
+      }
     }
-
   }
   onChange = targetKeys => {
-    const {onTransfer} = this.props
+    const { onTransfer } = this.props;
     this.setState({ targetKeys });
-    onTransfer(targetKeys)
+    onTransfer(targetKeys);
   };
 
   render() {
     const { targetKeys } = this.state;
-    const { treeData } = this.props;
+    const { treeData, disabledId,showKey,topTitle } = this.props;
     return (
-      <div>
-          <TreeTransfer dataSource={[treeData]} targetKeys={targetKeys} onChange={this.onChange} />
+      <div className="treesfer">
+        <ConfigProvider locale={zhCN}>
+        <TreeTransfer
+          disabledId={disabledId}
+          dataSource={[treeData]}
+          targetKeys={targetKeys}
+          showKey={showKey}
+          topTitle={topTitle}
+          onChange={this.onChange}
+        />
+        </ConfigProvider>
       </div>
     );
   }

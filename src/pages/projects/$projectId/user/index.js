@@ -2,11 +2,12 @@
  * @Author: 王硕
  * @Date: 2020-02-13 10:02:58
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-18 15:09:06
+ * @LastEditTime: 2020-02-21 15:00:51
  * @Description: file content
  */
 import React, { Component } from 'react';
 import {
+  Tag,
   Tree,
   Spin,
   Card,
@@ -29,6 +30,7 @@ import AddressBook from './addressBook';
 const { Option } = AutoComplete;
 
 const { TreeNode } = Tree;
+const obj = { role: '角色', permission: '权限', route: '菜单' };
 
 // 防抖函数
 function debounce(func, wait) {
@@ -72,20 +74,24 @@ class index extends Component {
     super(props);
     this.columns = [
       {
+        title: '人员Id',
+        dataIndex: 'oaCode',
+      },
+      {
         title: '人员姓名',
         dataIndex: 'name',
       },
       {
-        title: '角色',
+        title: '所属部门',
         dataIndex: 'orgName',
       },
       {
         title: '操作',
-        dataIndex: 'oaCode',
+        dataIndex: 'userId',
         render: (text, recard) => {
           return (
             <>
-              <a onClick={() => this.editRole(recard)}>编辑权限</a>
+              <a onClick={() => this.editRole(recard)}>分配角色</a>
               <a onClick={() => this.lookRole(recard)}>查看权限</a>
             </>
           );
@@ -103,12 +109,19 @@ class index extends Component {
     sendUserId: '',
     sendUserName: '',
     drawerVisible: false,
-    roleList: [],
+    showTransfer: false,
+    roleList: {
+      role: [],
+      permission: [],
+      route: [],
+    },
   };
   componentDidMount() {
     const { queryBranchVo, branchVo } = this.props;
     if (!branchVo.length) {
-      queryBranchVo();
+      setTimeout(() => {
+        queryBranchVo();
+      }, 300);
     }
   }
   onSearch = searchText => {
@@ -153,11 +166,9 @@ class index extends Component {
     });
   };
   addRole = () => {
-    const { setAuthAssignForUser } = this.props;
-    // 清空redux中userRole值
-    setAuthAssignForUser([]);
     this.setState({
       roleVisible: true,
+      showTransfer: true,
     });
   };
   lookRole = item => {
@@ -170,16 +181,21 @@ class index extends Component {
       projectId: projectId,
     }).then(res => {
       if (res.code === 200) {
-        const arr = [];
-        res.data.map(item => {
+        const obj = {
+          role: [],
+          permission: [],
+          route: [],
+        };
+        res.data.forEach(item => {
           for (const key in authData) {
             if (item.toString() === key) {
-              arr.push(authData[key]['name']);
+              const objKey = authData[key]['type'];
+              obj[objKey].push(authData[key]['name']);
             }
           }
         });
         this.setState({
-          roleList: arr,
+          roleList: obj,
         });
       }
     });
@@ -188,11 +204,21 @@ class index extends Component {
     this.setState({
       eyeVisible: false,
     });
+    setTimeout(() => {
+      this.setState({
+        roleList: {
+          role: [],
+          permission: [],
+          route: [],
+        },
+      });
+    }, 300);
   };
   editRole = item => {
     const { projectId, getAuthAssignForUser } = this.props;
     this.setState({
       roleVisible: true,
+      showTransfer: true,
       userId: item.oaCode,
       sendUserName: item.name,
       sendUserId: item.oaCode,
@@ -209,25 +235,27 @@ class index extends Component {
     });
   };
   roleHideModal = () => {
+    const { setAuthAssignForUser } = this.props;
+    // 清空redux中userRole值
+    setAuthAssignForUser([]);
     this.setState({
-      sendUserId: '',
-      sendUserName: '',
-      userId: '',
-      userRoleData: [],
       roleVisible: false,
     });
+
+    setTimeout(() => {
+      this.setState({
+        sendUserId: '',
+        sendUserName: '',
+        userId: '',
+        userRoleData: [],
+        showTransfer: false,
+      });
+    }, 300);
   };
   onEditEnd = () => {
     const { bmId } = this.state;
     const { getByOrgId } = this.props;
-    this.setState({
-      sendUserId: '',
-      sendUserName: '',
-      userId: '',
-      userRoleData: [],
-      roleVisible: false,
-      eyeVisible: false,
-    });
+    this.roleHideModal();
     getByOrgId({ orgId: bmId });
   };
   handleSubmit = () => {
@@ -295,6 +323,7 @@ class index extends Component {
       drawerVisible,
       eyeVisible,
       roleList,
+      showTransfer,
     } = this.state;
     return (
       <>
@@ -308,6 +337,7 @@ class index extends Component {
                   blockNode
                   defaultExpandAll
                   onSelect={this.onTreeSelect}
+                  style={{ minHeight: '200px' }}
                 >
                   {this.renderTreeNodes(branchVo)}
                 </Tree>
@@ -325,7 +355,7 @@ class index extends Component {
                     </Tooltip>
                   ) : null}
                 </div>
-                <div style={{ marginTop: '18px',height: 'calc(100vh - 400px)' }}>
+                <div style={{ marginTop: '18px', height: 'calc(100vh - 400px)' }}>
                   {title === '未选择部门' ? (
                     <Empty description={false} />
                   ) : (
@@ -334,7 +364,7 @@ class index extends Component {
                         rowKey="userId"
                         columns={this.columns}
                         dataSource={userInfo}
-                        scroll={{ y: 240 }}
+                        scroll={{ y: 'calc(100vh - 450px)' }}
                         pagination={false}
                       />
                     </Spin>
@@ -347,13 +377,14 @@ class index extends Component {
         <Modal
           title={userId ? '编辑权限' : '权限分配'}
           width={720}
+          style={{ top: 20 }}
           visible={roleVisible}
           onCancel={this.roleHideModal}
           maskClosable={false}
           footer={null}
         >
           <Form>
-            <Form.Item label="找人" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
+            <Form.Item label="找人" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
               <Row>
                 <Col span={22}>
                   <AutoComplete
@@ -377,17 +408,17 @@ class index extends Component {
                 </Col>
               </Row>
             </Form.Item>
-            {roleVisible ? (
-              <Form.Item label="权限分配" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
-                {forUseLoading && userId ? (
-                  <Spin />
-                ) : (
+            {showTransfer ? (
+              <Form.Item label="角色分配：" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+                <Spin spinning={forUseLoading && !!userId}>
                   <RoleTransfer
                     treeData={authList}
                     onTransfer={this.onTransfer}
+                    showKey={{role:'角色'}}
+                    topTitle={['全部角色','已分配角色']}
                     roleType="user"
                   ></RoleTransfer>
-                )}
+                </Spin>
               </Form.Item>
             ) : null}
             <Form.Item style={{ textAlign: 'right' }}>
@@ -406,17 +437,26 @@ class index extends Component {
           maskClosable={false}
           footer={null}
         >
-          {forUseLoading ? (
-            <Spin />
-          ) : roleList.length ? (
-            <Descriptions bordered>
-              <Descriptions.Item label="人员权限" span={3}>
-                {roleList.join(',')}
-              </Descriptions.Item>
-            </Descriptions>
-          ) : (
-            <Empty description="该角色暂无权限" image={Empty.PRESENTED_IMAGE_SIMPLE}/>
-          )}
+          {
+            <Spin spinning={forUseLoading}>
+              <Descriptions bordered size="small" style={{ minHeight: '80px' }}>
+                {Object.keys(roleList).map((item,index) => {
+                  return (
+                    <Descriptions.Item label={obj[item]} key={index} span={3}>
+                      {roleList[item].length
+                        ? roleList[item].map((item,index) => (
+                            <Tag color="geekblue" style={{ marginBottom: '5px' }}>
+                              {item}
+                            </Tag>
+                          ))
+                        : '暂无' + obj[item] + '分配'}
+                    </Descriptions.Item>
+                  );
+                })}
+                )
+              </Descriptions>
+            </Spin>
+          }
         </Modal>
         <AddressBook
           drawerVisible={drawerVisible}

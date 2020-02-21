@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-05 15:19:25
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-18 15:34:09
+ * @LastEditTime: 2020-02-20 16:17:51
  * @Description: file content
  */
 /**
@@ -43,7 +43,8 @@ class index extends Component {
     fetchDetail(params.projectId).then(res => {
       if (res.data) {
         fetchAuthList(res.data.id);
-      } else {
+      }
+      if(!res.data && res.code === 200){
         router.push('/error');
       }
     });
