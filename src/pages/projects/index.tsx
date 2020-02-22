@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 12:31:20
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-20 15:40:48
+ * @LastEditTime: 2020-02-22 12:48:09
  * @Description: file content
  */
 /**
@@ -29,7 +29,7 @@ interface ProjectsProps {
 
 function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   const [visible, setVisible] = useState(false); // 设置弹窗
-  const [projectDetail, setProjectDetail] = useState(null); // 设置编辑值
+  const [projectDetail, setProjectDetail] = useState({}); // 设置编辑值
 
   useEffect(() => {
     if (isEmpty(lists)) {
@@ -45,7 +45,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   // 关闭弹窗
   const hideModal = useCallback(() => {
     setVisible(false);
-    setProjectDetail(null);
+    setProjectDetail({});
   }, []);
 
   const onEditEnd = useCallback(() => {
