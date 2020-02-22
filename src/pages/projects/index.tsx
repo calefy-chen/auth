@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-06 12:31:20
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-22 12:48:09
+ * @LastEditTime: 2020-02-22 12:49:54
  * @Description: file content
  */
 /**
@@ -45,7 +45,9 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   // 关闭弹窗
   const hideModal = useCallback(() => {
     setVisible(false);
-    setProjectDetail({});
+    setTimeout(() => {
+      setProjectDetail({});
+    }, 200);
   }, []);
 
   const onEditEnd = useCallback(() => {
