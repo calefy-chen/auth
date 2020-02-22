@@ -26,7 +26,7 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
   // 需要登录时，获取当前登录用户，获取失败时跳转
   useEffect(() => {
     if (!noNeedLogin && !Cookies.get('auth.token')) {
-        router.push('/user/login');
+        router.replace('/user/login');
     }else{
       fetchCurrent()
     }

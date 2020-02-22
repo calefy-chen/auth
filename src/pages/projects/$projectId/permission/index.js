@@ -2,12 +2,11 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:34:45
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-18 15:53:32
+ * @LastEditTime: 2020-02-21 23:13:52
  * @Description: file content
  */
 import React, { Component } from 'react';
-import get from 'lodash/get';
-import { Modal, Button, message, Descriptions, Empty, Spin } from 'antd';
+import { Modal, Button, message, Descriptions, Spin, Tag } from 'antd';
 import { connect } from 'dva';
 import DragTree from '@/components/DragTree/dragTree';
 import PerForm from './perForm';
@@ -19,7 +18,7 @@ const { confirm } = Modal;
     toWhoData: authAssign.toWhoData,
     projectId: project.projectDetail.id,
     authList: auth.authList,
-    authData:auth.authData
+    authData: auth.authData,
   }),
   dispatch => ({
     deleteAuth: payload => dispatch({ type: 'auth/deleteAuth', payload }),
@@ -65,7 +64,7 @@ class index extends Component {
           if (res.code === 200) {
             message.success('删除成功');
             fetchAuthList(projectId);
-          }else{
+          } else {
             message.error(res.message);
           }
         });
@@ -88,8 +87,12 @@ class index extends Component {
   hideModal = () => {
     this.setState({
       visible: false,
-      perDetail: {},
     });
+    setTimeout(() => {
+      this.setState({
+        perDetail: {},
+      });
+    }, 200);
   };
   hideEyeModal = () => {
     this.setState({
@@ -98,25 +101,26 @@ class index extends Component {
   };
   onEditEnd = () => {
     const { fetchAuthList, projectId } = this.props;
-    this.setState({
-      visible: false,
-      perDetail: {},
-    });
+    this.hideModal();
     fetchAuthList(projectId);
   };
   render() {
     const { visible, perDetail, parentId, eyeVisible } = this.state;
-    const { toWhoData, loading,authData } = this.props;
-    const iconData = { 'plus-square': '添加',edit: '编辑',eye: '查看权限分配', delete: '删除' };
-    let rolesArr = []
-    if(toWhoData['roles']){
-      toWhoData['roles'].map(item => {
+    const { toWhoData, loading, authData } = this.props;
+    const iconData = { 'plus-square': '添加', edit: '编辑', eye: '查看权限分配', delete: '删除' };
+    let rolesArr = [];
+    if (toWhoData['roles']) {
+      toWhoData['roles'].forEach(item => {
         for (const key in authData) {
-          if(item === key){
-            rolesArr.push(authData[key]['name'])
+          if (item === key) {
+            rolesArr.push(authData[key]['name']);
           }
         }
-      })
+      });
+    }
+    let userArr = [];
+    if (toWhoData['users']) {
+      userArr = toWhoData['users'].map(item => item.userName);
     }
     return (
       <>
@@ -124,13 +128,13 @@ class index extends Component {
           新增权限
         </Button>
         <DragTree
-          authKey='permission'
+          authKey="permission"
           iconData={iconData}
           onOption={this.onOption}
           onDrop={this.onDrop}
         />
         <Modal
-          title={perDetail.id? "编辑权限":"新增权限"}
+          title={perDetail.id ? '编辑权限' : '新增权限'}
           visible={visible}
           onCancel={this.hideModal}
           maskClosable={false}
@@ -152,17 +156,31 @@ class index extends Component {
         >
           {loading ? (
             <Spin />
-          ) : get(toWhoData, 'roles', []).length || get(toWhoData, 'users', []).length ? (
-            <Descriptions  bordered size="small">
-              {get(toWhoData, 'roles', []).length && toWhoData['roles'] ? (
-                <Descriptions.Item label="角色" span={3}>{rolesArr.join(',')}</Descriptions.Item>
-              ) : null}
-              {get(toWhoData, 'users', []).length ? (
-                <Descriptions.Item label="人员" span={3}>{toWhoData['users'].map(item => item.userName).join(',')}</Descriptions.Item>
-              ) : null}
-            </Descriptions>
           ) : (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="该权限暂无分配" />
+            <Descriptions bordered size="small">
+              {
+                <Descriptions.Item label="角色" span={3}>
+                  {rolesArr.length
+                    ? rolesArr.map((item,index) => (
+                        <Tag color="geekblue" key={index} style={{ marginBottom: '5px' }}>
+                          {item}
+                        </Tag>
+                      ))
+                    : '暂无角色分配'}
+                </Descriptions.Item>
+              }
+              {
+                <Descriptions.Item label="人员" span={3}>
+                  {userArr.length
+                    ? userArr.map((item,index)=> (
+                        <Tag color="geekblue" key={index} style={{ marginBottom: '5px' }}>
+                          {item}
+                        </Tag>
+                      ))
+                    : '暂无人员分配'}
+                </Descriptions.Item>
+              }
+            </Descriptions>
           )}
         </Modal>
       </>

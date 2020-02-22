@@ -2,7 +2,7 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 15:53:05
+ * @LastEditTime: 2020-02-21 22:23:01
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -76,17 +76,21 @@ const authAssign: Model = {
       return res;
     },
     *getByOrgId({ payload }, { call, put }) {
-      const { orgId,isAddress } = payload;
+      const { orgId } = payload;
       const res = yield call(api.getByOrgId, orgId[0]);
       if (res && res.data) {
-        if(isAddress){
-          yield put({ type: 'setAddByOrgId', payload: res.data });
-        }else{
-          yield put({ type: 'setByOrgId', payload: res.data });
-        }
-
-        // 通讯录用户数据
-
+        yield put({ type: 'setAddByOrgId', payload: res.data });
+      }
+      return res;
+    },
+    *forOrgStaff({ payload }, { call,put }) {
+      let { orgId,projectId } = payload;
+      if(Array.isArray(orgId)){
+        orgId=orgId.join(',')
+      }
+      const res = yield call(api.forOrgStaff, projectId,orgId);
+      if(res && res.data){
+        yield put({ type: 'setByOrgId', payload: res.data });
       }
       return res;
     },
@@ -122,9 +126,17 @@ const authAssign: Model = {
       };
     },
     setByOrgId(state, action) {
+      const data = get(action, 'payload').map((item:any,index:any) =>{
+        return {
+          userId:item.userId,
+          userName:item.userName,
+          key:index,
+          items:item.items
+        }
+      })
       return {
         ...state,
-        userInfo: get(action, 'payload'),
+        userInfo:data,
       };
     },
     setAddByOrgId(state, action) {

@@ -11,3 +11,6 @@
 .listItem:hover{
   border: 1px solid #1890ff !important;
 }
+.ant-descriptions-bordered .ant-descriptions-item-label{
+  width: 100px !important;
+}

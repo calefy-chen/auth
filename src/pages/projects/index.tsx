@@ -1,8 +1,15 @@
+/*
+ * @Author: 王硕
+ * @Date: 2020-02-06 12:31:20
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-22 12:49:54
+ * @Description: file content
+ */
 /**
  * 项目列表页
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Icon, Row, Col, Modal, message, Spin, Tooltip } from 'antd';
+import { Card, Icon, Row, Col, Modal, message, Spin, Tooltip, Empty } from 'antd';
 import Link from 'umi/link';
 import isEmpty from 'lodash/isEmpty';
 import { connect, router } from 'dva';
@@ -22,7 +29,7 @@ interface ProjectsProps {
 
 function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   const [visible, setVisible] = useState(false); // 设置弹窗
-  const [projectDetail, setProjectDetail] = useState(null); // 设置编辑值
+  const [projectDetail, setProjectDetail] = useState({}); // 设置编辑值
 
   useEffect(() => {
     if (isEmpty(lists)) {
@@ -38,7 +45,9 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
   // 关闭弹窗
   const hideModal = useCallback(() => {
     setVisible(false);
-    setProjectDetail(null);
+    setTimeout(() => {
+      setProjectDetail({});
+    }, 200);
   }, []);
 
   const onEditEnd = useCallback(() => {
@@ -57,7 +66,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
           if (res.code === 200) {
             message.success('删除成功');
             fetchList();
-          }else{
+          } else {
             message.error(res.message);
           }
         });
@@ -74,7 +83,7 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
     );
   }
   return (
-    <div style={{ background: '#ECECEC', padding: '30px' }}>
+    <div style={{ background: '#ECECEC', padding: '30px',minHeight:'240px' }}>
       <Row gutter={[16, 16]}>
         {lists.map(item => (
           <Col span={8} key={item.id}>
@@ -97,15 +106,31 @@ function Projects({ lists, loading, fetchList, delProject }: ProjectsProps) {
             </Card>
           </Col>
         ))}
-        <Col span={8}>
-          <Card className={styles.addBtn} hoverable onClick={() => showModal()}>
-            <Icon type="plus" style={{ fontSize: 30 }} />
-          </Card>
-        </Col>
+        {lists.length ? (
+          <Col span={8}>
+            <Card className={styles.addBtn} hoverable onClick={() => showModal()}>
+              <Tooltip placement="top" title="新建项目">
+                <Icon type="plus" style={{ fontSize: 30 }} />
+              </Tooltip>
+            </Card>
+          </Col>
+        ) : (
+          <Empty
+            imageStyle={{
+              height: 80,
+              marginTop:30
+            }}
+            description={
+              <span>
+                当前尚无项目<a onClick={() => showModal()} style={{fontSize:'14px',color:'#238dd9'}}>[创建项目]</a>
+              </span>
+            }
+          ></Empty>
+        )}
       </Row>
 
       <Modal
-        title={projectDetail?.id?  '编辑项目':'创建项目'}
+        title={projectDetail?.id ? '编辑项目' : '创建项目'}
         visible={visible}
         onCancel={hideModal}
         maskClosable={false}

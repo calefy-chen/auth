@@ -2,12 +2,12 @@
  * @Author: 王硕
  * @Date: 2020-02-05 17:41:49
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 17:10:36
+ * @LastEditTime: 2020-02-20 14:34:38
  * @Description: file content
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Tree, Icon, Empty, Card, Tooltip, message } from 'antd';
+import { Tree, Icon, Empty, Card, Tooltip, message,Spin } from 'antd';
 import PropTypes from 'prop-types';
 import './index.css';
 
@@ -19,7 +19,6 @@ const { TreeNode } = Tree;
     authList: auth.authList,
   }),
   dispatch => ({
-    // setAuthList:
     dragItem: payload => dispatch({ type: 'auth/dragItem', payload }),
     setAuthList: payload => dispatch({ type: 'auth/setAuthList', payload }),
   }),
@@ -39,7 +38,7 @@ class dragTree extends Component {
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
     const loop = (data, key, callback) => {
       data.forEach((item, index, arr) => {
-        if (parseInt(item.id) === parseInt(key)) {
+        if (item.id === key) {
           return callback(item, index, arr);
         }
         if (item.children) {
@@ -48,7 +47,7 @@ class dragTree extends Component {
       });
     };
     // 深度copy authList
-    const allData = Object.assign({}, authList);
+    const allData = JSON.parse(JSON.stringify(authList));
     // 获取当前data
     const data = allData[authKey];
 
@@ -60,6 +59,7 @@ class dragTree extends Component {
     });
     //修改目标的parentId
     dragObj.parentId = info.node.props.dataRef.parentId
+
 
     if (!info.dropToGap) {
       // Drop on the content
@@ -94,7 +94,6 @@ class dragTree extends Component {
       }
     }
 
-    allData[authKey] = data;
     // 请求服务端
     const { dragItem } = this.props;
     const id = info.dragNode.props.dataRef.id;
@@ -102,13 +101,19 @@ class dragTree extends Component {
     let level = info.node.props.pos.split('-').pop() - 0 + 1;
     if (!info.dropToGap) {
       parentId = info.node.props.dataRef.id;
-      level = info.node.props.dataRef.children.length
+      if(info.node.props.dataRef.children){
+        level = info.node.props.dataRef.children.length
+      }else{
+        level = 1
+      }
+
     } else {
       parentId = info.node.props.dataRef.parentId;
     }
     dragItem({ id, parentId, level }).then(res => {
       // 修改redux中authList
       if(res.code === 200){
+        allData[authKey] = data;
         setAuthList(allData);
         message.success('操作成功')
       }else{
@@ -133,7 +138,7 @@ class dragTree extends Component {
     const { iconData } = this.props;
     return (
       <div className="dragItem clearfix">
-        <p style={{ float: 'left' }}>
+        <p style={{ float: 'left',fontSize:'14px' }}>
           <span>{msg.name}</span>&nbsp;&nbsp;
           <span style={{ color: '#999' }}>{msg.code}</span>
         </p>
@@ -165,13 +170,17 @@ class dragTree extends Component {
     onOption(item, parentId, type);
   }
   render() {
-    const { authList, authKey } = this.props;
+    const { authList, authKey,loading } = this.props;
     return authList[authKey].length ? (
+
       <Card style={{ width: '60%', margin: '15px auto 0 auto' }}>
+        <Spin spinning={loading}>
         <Tree className="draggable-tree" draggable showLine blockNode defaultExpandAll onDrop={this.onDrop}>
           {this.renderTreeNodes(authList[authKey])}
         </Tree>
+       </Spin>
       </Card>
+
     ) : (
       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据"/>
     );

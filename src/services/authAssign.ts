@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-11 05:10:37
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 14:57:26
+ * @LastEditTime: 2020-02-21 20:10:35
  * @Description: file content
  */
 import { get, post } from '@/utils/request';
@@ -33,6 +33,9 @@ export const getSelfDept = () => {
 };
 export const getByOrgId = (orgId:string) => {
   return get('/cmsoa/uuv/user/byOrgId',{orgId})
+};
+export const forOrgStaff = (projectId:string,orgId:string) => {
+  return get('/authsys/authAssign/forOrgStaff',{projectId,orgId})
 };
 export const searchUser = (keyword:string) => {
   return get('/cmsoa/uuv/addressBook/searchUser',{keyword})

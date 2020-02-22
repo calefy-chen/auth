@@ -2,7 +2,7 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 14:58:10
+ * @LastEditTime: 2020-02-19 17:28:57
  * @Description: file content
  */
 import { IConfig } from 'umi-types';

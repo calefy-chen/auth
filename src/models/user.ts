@@ -1,8 +1,8 @@
 /*
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
- * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-06 11:22:26
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-20 14:38:20
  * @Description: file content
  */
 import { Model } from 'dva';
@@ -29,11 +29,11 @@ const User: Model = {
 
     // 获取当前用户
     *current(_, { call, put }) {
-      const { data } = yield call(api.current);
-      if (data) {
-        yield put({ type: 'user', payload: data });
+      const res = yield call(api.current);
+      if (res.data) {
+        yield put({ type: 'user', payload: res.data });
       }
-      return data;
+      return res;
     },
   },
 

@@ -1,8 +1,8 @@
 /*
  * @Author: 王硕
  * @Date: 2020-02-12 14:15:18
- * @LastEditors  : 王硕
- * @LastEditTime : 2020-02-14 21:52:56
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-02-21 14:48:58
  * @Description: file conte
  */
 import React, { Component } from 'react';
@@ -22,6 +22,14 @@ import RoleTransfer from '@/components/RoleTransfer';
 )
 class toRoleForm extends Component {
   state = { roleData: '' };
+  componentDidMount(){
+    const { roleId, getAuthAssignForRole } = this.props;
+    getAuthAssignForRole(roleId).then(res => {
+      this.setState({
+        roleData:res.data.map(item => item.toString())
+      })
+    });
+  }
   componentDidUpdate(pre) {
     const { roleId, getAuthAssignForRole } = this.props;
     if(pre.roleId !== roleId && roleId){
@@ -31,7 +39,6 @@ class toRoleForm extends Component {
         })
       });
     }
-
   }
   onTransfer = roleData => {
     this.setState({
@@ -51,15 +58,13 @@ class toRoleForm extends Component {
     });
   }
   render() {
-    const { roleLoading, authData, cancel } = this.props;
+    const { roleLoading, authData, cancel,roleId } = this.props;
     return (
       <Form>
         <Form.Item>
-          {roleLoading ? (
-            <Spin />
-          ) : (
-            <RoleTransfer treeData={authData} onTransfer={this.onTransfer}></RoleTransfer>
-          )}
+          <Spin spinning={roleLoading}>
+           <RoleTransfer treeData={authData} onTransfer={this.onTransfer} disabledId={roleId}></RoleTransfer>
+          </Spin>
         </Form.Item>
         <Form.Item style={{ textAlign: 'right' }}>
           <Button type="primary" onClick={this.handleSubmit} loading={roleLoading}>

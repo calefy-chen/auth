@@ -2,7 +2,7 @@
  * @Author: 王硕
  * @Date: 2020-02-10 13:42:19
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-17 15:51:56
+ * @LastEditTime: 2020-02-21 14:51:35
  * @Description: file content
  */
 import React, { Component } from 'react';
@@ -48,7 +48,6 @@ class perForm extends Component {
       editAuth,
       onEditEnd
     } = this.props;
-    const {roleData} = this.state
     validateFields((errors, values) => {
       if (errors) return;
       let parmas = { ...values };
