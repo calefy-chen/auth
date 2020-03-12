@@ -8,7 +8,6 @@ import { connect } from 'dva';
 import { Form, Button, Input, Icon } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './index.less';
-import logo from '@/assets/logo.png';
 
 // 登录上传参数
 interface LoginParams {
@@ -36,11 +35,12 @@ const Login = ({
     e.preventDefault();
     validateFields((errors, values) => {
       if (errors) return;
-      login(values).then(res => {
-        if (res) {
-          router.push('/system/2001');
-        }
-      });
+      // login(values).then(res => {
+      //   if (res) {
+
+      //   }
+      // });
+      router.push('/');
     });
   }, []);
 
@@ -51,8 +51,7 @@ const Login = ({
         <div className={styles.top}>
           <div className={styles.header}>
             <Link to="/">
-              <img alt="logo" className={styles.logo} src={logo} />
-              <span className={styles.title}>统一运维监控</span>
+              <span className={styles.title}>函件系统</span>
             </Link>
           </div>
           <div className={styles.desc}>

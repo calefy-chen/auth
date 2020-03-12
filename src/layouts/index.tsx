@@ -5,7 +5,6 @@ import { RouteProps } from 'react-router';
 import isEmpty from 'lodash/isEmpty';
 import { Spin, Layout  } from 'antd';
 import Header from '@/components/Header';
-import SilderMenu from '@/components/SilderMenu'
 
 const { Content } = Layout;
 
@@ -26,13 +25,13 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
 
   // 需要登录时，获取当前登录用户，获取失败时跳转
   useEffect(() => {
-    if (!noNeedLogin && !user.name) {
-      fetchCurrent().then(u => {
-        if (!u) {
-          router.push('/user/login');
-        }
-      });
-    }
+    // if (!noNeedLogin && !user.name) {
+    //   fetchCurrent().then(u => {
+    //     if (!u) {
+    //       router.push('/user/login');
+    //     }
+    //   });
+    // }
   }, [noNeedLogin, user]);
 
   // 不需要登录的页面，单独布局
@@ -41,30 +40,26 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
   }
 
   // 加载当前用户期间，loading
-  if (isEmpty(user) || userLoading) {
-    return (
-      <div style={{ textAlign: 'center', padding: 120 }}>
-        <Spin size="large" />
-      </div>
-    );
-  }
+  // if (isEmpty(user) || userLoading) {
+  //   return (
+  //     <div style={{ textAlign: 'center', padding: 120 }}>
+  //       <Spin size="large" />
+  //     </div>
+  //   );
+  // }
 
   // 渲染标准布局
   return (
     <>
-      <Layout>
-        <SilderMenu location={location} />
         <Layout
           style={{
             backgroundColor: '#efefef',
-            minHeight: '100vh',
-            paddingLeft: 10, 
+            minHeight: '100vh'
           }}
         >
-          <Header user={user} />
-          <Content>{children}</Content>
+          <Header user={user} location={location}/>
+          <Content style={{margin:'0 15px'}}>{children}</Content>
         </Layout>
-      </Layout>
       {/* <Header user={user} /> */}
       {/* <div className={styles.content}>{children}</div> */}
     </>
