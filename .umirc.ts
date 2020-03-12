@@ -1,8 +1,8 @@
 /*
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
- * @LastEditors  : 林骏宏
- * @LastEditTime : 2020-02-07 22:39:26
+ * @LastEditors: 王硕
+ * @LastEditTime: 2020-03-12 14:30:31
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
@@ -42,6 +42,16 @@ const config: IConfig =  {
       changeOrigin: true,
       pathRewrite: { '^/cmsoa': '' },
     },
+    '/cmonitor': {
+      target: 'http://47.113.114.129:3001/cmonitor',
+      changeOrigin: true,
+      pathRewrite: { '^/cmonitor': '' },
+    },
+    '/cmsoa': {
+      target: 'http://47.113.114.129:3001/cmsoa',
+      changeOrigin: true,
+      pathRewrite: { '^/cmsoa': '' },
+    },
   },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
@@ -73,6 +83,9 @@ const config: IConfig =  {
       },
     }],
   ],
+  cssLoaderOptions:{
+    localIdentName:'[local]'
+  },
   chainWebpack(config, { webpack }) {
     const isProd = process.env.NODE_ENV === 'production'
 

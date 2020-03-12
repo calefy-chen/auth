@@ -15,7 +15,7 @@ interface BasicLayoutProps extends RouteProps {
 }
 
 // 不需要登录的url列表
-const NO_NEED_LOGINS = ['/user/login'];
+const NO_NEED_LOGINS = ['/user/login','/error'];
 
 const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: BasicLayoutProps) => {
   // 是否不需要登录

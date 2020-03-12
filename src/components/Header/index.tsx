@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import router from 'umi/router';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { Menu, Dropdown, Icon,Row, Col } from 'antd';

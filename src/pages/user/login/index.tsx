@@ -19,6 +19,7 @@ interface LoginParams {
 interface LoginProps {
   loginLoading: boolean;
   form: WrappedFormUtils;
+  fetchCurrent(): Promise<any>;
   login(payload: LoginParams): Promise<any>;
 }
 
@@ -28,6 +29,7 @@ interface LoginProps {
 const Login = ({
   loginLoading,
   login,
+  fetchCurrent,
   form: { getFieldDecorator, validateFields },
 }: LoginProps) => {
   // 执行登录
@@ -88,5 +90,6 @@ export default connect(
   }),
   dispatch => ({
     login: (payload: LoginParams) => dispatch({ type: 'user/login', payload }),
+    fetchCurrent: () => dispatch({ type: 'user/current' }),
   }),
 )(Form.create()(Login));
