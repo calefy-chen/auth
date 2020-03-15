@@ -83,9 +83,6 @@ const config: IConfig =  {
       },
     }],
   ],
-  cssLoaderOptions:{
-    localIdentName:'[local]'
-  },
   chainWebpack(config, { webpack }) {
     const isProd = process.env.NODE_ENV === 'production'
 

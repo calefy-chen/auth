@@ -68,10 +68,7 @@ const BasicLayout = ({ user, userLoading, location, children, fetchCurrent }: Ba
 
 export default connect(
   ({ user, loading }: any) => ({
-    user: user.user,
-    userLoading: loading.effects['user/current'],
   }),
   dispatch => ({
-    fetchCurrent: () => dispatch({ type: 'user/current' }),
   }),
 )(BasicLayout);
