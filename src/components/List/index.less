@@ -1,0 +1,48 @@
+.searchForm {
+  position: relative;
+  padding-top: 20px;
+  margin-bottom: 15px;
+
+  &.unexpanded {
+    display: flex;
+    overflow: hidden;
+
+    .items {
+      flex: 1;
+      height: 44px;
+    }
+  }
+
+  &.expanded {
+    .buttons {
+      padding-top: 15px;
+    }
+  }
+
+  .item {
+    display: flex;
+
+    .label {
+      min-width: 90px;
+      padding-right: 10px;
+      line-height: 33px;
+      text-align: right;
+    }
+
+    .input {
+      flex: 1;
+    }
+  }
+
+  .buttons {
+    text-align: right;
+    padding-left: 15px;
+    align-self: flex-end;
+
+    .link {
+      color: #e03d3e;
+      width: 50px;
+      margin: 0 10px 0 5px;
+    }
+  }
+}

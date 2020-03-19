@@ -2,11 +2,12 @@
  * @Author: 林骏宏
  * @Date: 2020-02-04 12:07:25
  * @LastEditors: 王硕
- * @LastEditTime: 2020-02-19 17:28:57
+ * @LastEditTime: 2020-03-12 14:30:31
  * @Description: file content
  */
 import { IConfig } from 'umi-types';
-import theme from '@ant-design/aliyun-theme'
+// import theme from '@ant-design/aliyun-theme'
+const RED = '#e03d3e';
 
 // ref: https://umijs.org/config/
 const config: IConfig =  {
@@ -15,10 +16,31 @@ const config: IConfig =  {
   publicPath: './',
   treeShaking: true,
   proxy: {
-    '/authsys': {
-      target: 'http://47.113.114.129:3001/authsys',
+    // '/authsys': {
+    //   target: 'http://47.113.114.129:3000/authsys',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/authsys': '' },
+    // },
+    // '/sys_inspect': {
+    //   target: 'http://47.113.114.129:3000/sys_inspect',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/sys_inspect': '' },
+    // },
+    '/sys_inspect': {
+      target: 'http://172.253.60.240:8081/sys_inspect',
       changeOrigin: true,
-      pathRewrite: { '^/authsys': '' },
+      pathRewrite: { '^/sys_inspect': '' },
+    },
+    '/cmonitor': {
+      target: 'http://172.253.60.240:8081/cmonitor',
+      changeOrigin: true,
+      pathRewrite: { '^/cmonitor': '' },
+    },
+    '/cmsoa': {
+      // 对OA相关接口调用
+      target: 'http://172.253.40.249:8081',
+      changeOrigin: true,
+      pathRewrite: { '^/cmsoa': '' },
     },
     '/cmonitor': {
       target: 'http://47.113.114.129:3001/cmonitor',
@@ -37,14 +59,19 @@ const config: IConfig =  {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'Auth',
+      title: '统一运维监控',
       links: [{
         rel: 'icon',
         type: 'image/x-icon',
-        href: 'favicon.ico'
+        href: 'favicon.png'
       }],
       dll: true,
-
+      locale: {
+        enable: false,
+        // default false
+        default: 'zh-CN',
+        baseNavigator: true,
+      },
       routes: {
         exclude: [
           /models\//,
@@ -56,9 +83,6 @@ const config: IConfig =  {
       },
     }],
   ],
-  cssLoaderOptions:{
-    localIdentName:'[local]'
-  },
   chainWebpack(config, { webpack }) {
     const isProd = process.env.NODE_ENV === 'production'
 
@@ -86,7 +110,21 @@ const config: IConfig =  {
     }
   },
   // 使用主题
-  theme,
+  theme: {
+    'border-radius-base': '2px',
+    'primary-color': '#cc9d52',
+    'btn-primary-bg': RED,
+    'menu-dark-item-active-bg': '#1890FF',
+    // 'form-item-margin-bottom': '20px',
+    // 'form-component-max-height': '30px',
+    'tabs-card-active-color': RED,
+    'tabs-active-color': RED,
+    'tabs-highlight-color': RED,
+    'tabs-ink-bar-color': RED,
+    'tabs-hover-color': RED,
+    'tabs-horizontal-margin': '0 12px 0 24px',
+    'tabs-vertical-padding': '8px 10px 8px 0',
+  },
 }
 
 export default config;

@@ -2,10 +2,10 @@
 /**
  * 封装ajax请求
  */
+
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
-import qs from 'qs'
 import router from 'umi/router';
-import Cookies from 'js-cookie';
+
 
 function axiosRequest(config: AxiosRequestConfig) {
   return axios(config)
@@ -48,6 +48,7 @@ export function post(url: string, data?: object, config?: AxiosRequestConfig) {
     ...config,
     url,
     method: 'POST',
-    data: qs.stringify(data)
+    // data: qs.stringify(data)
+    data: data
   })
 }

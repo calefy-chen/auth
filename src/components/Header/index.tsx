@@ -1,41 +1,71 @@
-import React , { useState, useEffect, useCallback }from 'react';
+import React, { useCallback } from 'react';
 import Link from 'umi/link';
-import { Icon, Dropdown, Menu } from 'antd';
-import Cookies from 'js-cookie'
+import { connect } from 'dva';
+import { Menu, Dropdown, Icon,Row, Col } from 'antd';
 import styles from './index.less';
-import router from 'umi/router';
+import logo from '@/assets/logo.png';
 
-export default function Header(user: any) {
-  const userInfo = user.user;
-  const loginOut = useCallback((key = null) => {
-      if(key === '1'){
-        Cookies.remove('auth.token');
-        router.push('/user/login')
-      }
+interface HeaderProps {
+  user: any;
+  location:any;
+  logout(): Promise<any>;
+}
+
+const Header = ({ user,location, logout }: HeaderProps) => {
+  const onLogout = useCallback(() => {
+    logout();
+    // setTimeout(() => {
+    //   router.push('/user/login');
+    // }, 0);
   }, []);
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <a>
+          退出登录
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
+  const routeList = [
+    {name:'函件中心',path:'/letter'},
+    {name:'任务管理',path:'/task'},
+    {name:'处理统计',path:'/statistics'},
+  ]
+  console.log(user,location,'xxxx')
   return (
     <div className={styles.header}>
-      <div className={styles.content}>
-        <span className={styles.home} style={{ float: 'left' }}>
-          <Icon type="home" style={{ fontSize: 16, marginRight: 4 }} />
-          <Link to="/">首页</Link>
-        </span>
-        <span style={{ float: 'right' }}>
-          <Dropdown
-            overlay={
-              <Menu onClick={({key}) => loginOut(key)}>
-                <Menu.Item key="1">
-                  <a>退出登录</a>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <a className={styles.name}>
-              {userInfo.name} <Icon type="down" />
-            </a>
-          </Dropdown>
-        </span>
-      </div>
+      <Col span={8}>
+        <Link to="/">
+          <img src={logo} alt="logo" width="327" height="22" />
+        </Link>
+      </Col>
+      <Col span={5} offset={9}>
+        <nav>
+          {
+            routeList.map(item => (
+              <Link to={item.path} key={item.path} className={item.path === location.pathname? styles.active:styles.link}>{item.name}</Link>
+            ))
+          }
+        </nav>
+      </Col>
+
+
+      <Col span={2}>
+        <div style={{float:'right'}}>
+        <Dropdown overlay={menu}>
+          <a style={{color:'#333333'}}>
+            <Icon type="user" />&nbsp;&nbsp;
+            张三&nbsp;
+            <Icon type="caret-down" />
+          </a>
+        </Dropdown>
+        </div>
+      </Col>
     </div>
   );
-}
+};
+
+export default connect(null, dispatch => ({
+  logout: () => dispatch({ type: 'user/logout' }),
+}))(Header);

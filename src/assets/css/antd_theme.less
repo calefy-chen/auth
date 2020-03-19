@@ -1,0 +1,461 @@
+@import './theme.less';
+// 每个模块的盒子
+#page_box {
+  .ant-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+// 抽屉的外层
+.drawer_box {
+  // 抽屉的容器外层
+  .ant-drawer-wrapper-body {
+    display: flex;
+    flex-direction: column;
+    flex-basis: auto;
+    // 容器的body
+    .ant-drawer-body {
+      display: flex;
+      flex: 1;
+      flex-basis: auto;
+      overflow: auto;
+      padding: 0;
+      .ant-tabs-content {
+        flex: 1;
+      }
+      // 加载中的盒子
+      .loading {
+        flex: 1;
+        flex-basis: auto;
+        .ant-spin-container {
+          flex-basis: auto;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+// 弹框的父节点
+.alertBox {
+  .ant-tabs-bar {
+    margin: 0;
+  }
+}
+
+// 面包屑最后一个/
+.ant-breadcrumb-separator {
+  display: none;
+}
+
+:global {
+  // 左边的menu
+  .MenuSider {
+    .ant-badge-count {
+      margin-left: 6px;
+      box-shadow: none;
+    }
+    
+    .ant-layout-sider-children {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-inline .ant-menu-submenu-title,
+    .ant-menu-inline .ant-menu-item:not(:last-child) {
+      margin: 0;
+    }
+
+    .ant-menu-item .anticon,
+    .ant-menu-submenu-title .anticon {
+      margin-right: 12px;
+    }
+
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected,
+    .ant-menu-submenu-selected {
+      background-color: @themeColor;
+      .ant-badge-count {
+        color: @themeColor;
+        background: #fff;
+      }
+    }
+
+    .ant-menu-sub.ant-menu-inline {
+      padding: 5px 0;
+    }
+    .ant-menu-sub.ant-menu-inline > .ant-menu-item {
+      padding: 8px 10px 8px 30px !important;
+      line-height: 35px;
+      height: auto;
+      white-space: normal;
+    }
+    .ant-menu-vertical-right .ant-menu-item::after,
+    .ant-menu-inline .ant-menu-item::after {
+      border-color: @themeColor;
+    }
+    .ant-menu-item-selected,
+    .ant-menu-item-selected a,
+    .ant-menu-submenu-selected {
+      color: #fff;
+    }
+    .ant-menu-inline > .ant-menu-item,
+    .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+      height: 48px;
+      line-height: 48px;
+    }
+    .ant-menu-item a {
+      display: flex;
+      align-items: center;
+    }
+    .ant-menu-item a:hover,
+    .ant-menu-submenu-title:hover {
+      color: @themeColor;
+    }
+
+    .ant-menu-submenu-selected .ant-menu-submenu-title:active {
+      background: @themeColor;
+    }
+
+    .ant-menu-submenu-selected .ant-menu-submenu-title:hover {
+      color: #fff;
+    }
+
+    .ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-vertical-right
+      > .ant-menu-submenu-title:hover
+      .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {
+      background: linear-gradient(to right, @themeColor, @themeColor);
+    }
+    .ant-menu-item-selected:hover,
+    .ant-menu-item-selected > a,
+    .ant-menu-item-selected > a:hover {
+      color: #fff;
+    }
+
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu {
+      .ant-menu-item {
+        span {
+          color: #333;
+          font-size: 13px;
+          position: relative;
+          line-height: 1.5;
+        }
+        span::before {
+          position: absolute;
+          content: '';
+          width: 5px;
+          height: 5px;
+          background: #d9d9d9;
+          top: 6.5px;
+          left: -12px;
+          border-radius: 50%;
+        }
+        .anticon {
+          margin-right: 12px;
+        }
+        .anticon + span {
+          transition: none;
+        }
+      }
+    }
+
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-selected {
+      .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+      .ant-menu-submenu-title .ant-menu-submenu-arrow::before {
+        background-image: linear-gradient(to right, #fff, #fff);
+      }
+      .ant-menu-item-selected {
+        background-color: #fff;
+        span {
+          color: @themeColor;
+        }
+        span::before {
+          background: @themeColor;
+        }
+      }
+      .ant-menu-vertical-right .ant-menu-item::after,
+      .ant-menu-inline .ant-menu-item::after {
+        border-color: #fff;
+      }
+    }
+  }
+
+
+  .workbench_table {
+    padding: 3px 12px;
+    .ant-table-thead > tr > th {
+      color: #999;
+      background: #fff;
+    }
+    .workbench_table_row td,
+    .ant-table-thead > tr > th {
+      padding: 6px 4px;
+    }
+
+    .workbench_table_row td {
+      color: #666;
+    }
+
+    .ant-table-row:last-child td {
+      border: 0;
+    }
+  }
+
+  // 任务列表详情列表
+  .task_diff_box {
+    .ant-table-thead > tr > th,
+    .task_details_table_row > td {
+      padding: 7px 12px;
+    }
+
+    .columns_label_box {
+      background: #fafafa;
+      .columns_label {
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(102, 102, 102, 1);
+        line-height: 17px;
+      }
+    }
+
+    .columns_title {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+      line-height: 20px;
+    }
+
+    .columns_no {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(102, 102, 102, 1);
+      line-height: 17px;
+    }
+
+    .task_details_table_row > td {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(102, 102, 102, 1);
+      line-height: 20px;
+    }
+
+    .task_details_table_row_hot {
+      background: #fff8df;
+      .hot_text {
+        color: @themeColor;
+      }
+    }
+  }
+
+  // 任务列表详情列表
+  .details_task_box {
+    .ant-table-thead tr {
+      padding: 10px 26px;
+    }
+    .ant-table-thead tr .ant-table-column-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(153, 153, 153, 1);
+      line-height: 20px;
+    }
+  }
+
+  // 表格右边控制的盒子(常用模式和客户模式的单选框以及筛选)
+  .title_configBox {
+    display: flex;
+    align-items: center;
+    height: 48.91px;
+    .ant-radio-wrapper {
+      color: #999;
+    }
+    .ant-radio-wrapper-checked {
+      color: #333;
+    }
+    .ant-radio-checked .ant-radio-inner {
+      border-color: @themeColor;
+    }
+    .ant-radio-inner::after {
+      background-color: @themeColor;
+    }
+  }
+
+  // 任务列表单选项
+  .task_radio {
+    height: auto;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    padding-top: 8px;
+  }
+
+  // 每个page的盒子
+  .pageBox {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 7px 0 rgba(91, 79, 79, 0.08);
+    border-radius: 4px;
+  }
+  // 表格
+  .mode_table {
+    .ant-table-thead > tr > th {
+      color: #a7a7ac;
+      background: #fff;
+    }
+    .mode_table_row td {
+      padding: 18px 16px;
+      color: #666;
+    }
+  }
+  // 详情里的menu
+  .detail_menu {
+    height: '100%';
+    .ant-menu-inline > .ant-menu-item,
+    .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+    .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+      height: 32px;
+      line-height: 32px;
+    }
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+      background: #fdf5f5;
+    }
+    .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+    .ant-menu-submenu-title {
+      padding-left: 10px !important;
+    }
+    .ant-menu-inline .ant-menu-item:not(:last-child) {
+      margin-bottom: 0;
+    }
+    .ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
+    .ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-vertical-right
+      > .ant-menu-submenu-title:hover
+      .ant-menu-submenu-arrow::before,
+    .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {
+      background: linear-gradient(to right, @themeColor, @themeColor);
+    }
+    .ant-menu {
+      padding: 22px 0;
+      height: 100%;
+    }
+    .ant-menu-item {
+      padding-left: 10px !important;
+    }
+    .ant-menu-vertical-right .ant-menu-item::after,
+    .ant-menu-inline .ant-menu-item::after {
+      border-color: @themeColor;
+    }
+    .ant-menu-item-selected:hover,
+    .ant-menu-item:hover,
+    .ant-menu-item-selected,
+    .ant-menu-item:hover,
+    .ant-menu-submenu-title:hover {
+      color: @themeColor;
+    }
+  }
+
+  // 阈值的单选框
+  .threshold_radio {
+    .ant-radio-group {
+      .ant-radio-wrapper {
+        margin-right: 0;
+        span.ant-radio + * {
+          padding-right: 14px;
+          padding-left: 3px;
+        }
+      }
+    }
+  }
+
+  // 去除formitem底部边距
+  .formItem {
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+  }
+  // 阈值表格
+  .threshold_Box {
+    .ant-modal-content {
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  }
+
+  // 对象生成表单
+  .BaseToform {
+    .ant-input {
+      padding: 4px 8px;
+      font-size: 14px;
+      // color: rgba(167,167,172,1);
+    }
+    .mark {
+      position: relative;
+    }
+    .mark .ant-input,
+    .mark .ant-select-selection {
+      padding-left: 22px;
+    }
+    .mark .ant-select-selection__rendered {
+      margin: 0;
+    }
+    .mark::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      background: @themeColor;
+      margin-top: -3px;
+      left: 8px;
+      border-radius: 6px;
+    }
+  }
+
+  // 时间轴
+  #TimeLine {
+    .ant-timeline-item-head {
+      width: 7px;
+      height: 7px;
+      border-color: @themeColor;
+      background-color: @themeColor;
+    }
+    .ant-timeline-item-content {
+      margin-left: 15px;
+      min-height: 0;
+    }
+    .ant-timeline-item-tail {
+      position: absolute;
+      left: 3px;
+      height: 100%;
+      border-left: 2px solid @themeColor;
+    }
+    .ant-timeline-item-last {
+      padding-bottom: 0;
+    }
+  }
+  .task_Time_box {
+    .ant-timeline-item-head {
+      top: 14px;
+    }
+    .ant-timeline-item-tail {
+      top: 14px;
+    }
+  }
+}
+// 解决IE下选择每页条数的弹层被数据遮盖
+.ant-spin-container {
+  z-index: 10;
+}
